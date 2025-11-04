@@ -7,6 +7,7 @@ import Home from "./pages/home/home"
 import PlanTrip from "./pages/planejar viagens/planejar-viagens"
 import MyTrips from "./pages/minhas-viagens/minhas-viagens"
 import TripDetails from "./pages/detalhes-viagem/detalhes-viagem"
+import UserProfile from "./pages/perfil/perfil"
 import "./App.css"
 
 function App() {
@@ -53,6 +54,10 @@ function App() {
         <Route
           path="/trip-details/:tripId"
           element={isLoggedIn ? <TripDetails user={user} onLogout={handleLogout} /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/user-profile"
+          element={isLoggedIn ? <UserProfile user={user} onLogout={handleLogout} /> : <Navigate to="/login" />}
         />
         <Route path="/" element={<Navigate to={isLoggedIn ? "/home" : "/login"} />} />
       </Routes>

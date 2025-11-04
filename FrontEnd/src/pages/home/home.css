@@ -3,6 +3,7 @@
   background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%);
 }
 
+/* ===== NAVBAR ===== */
 .navbar {
   background: white;
   box-shadow: var(--box-shadow);
@@ -27,22 +28,7 @@
   font-weight: 700;
 }
 
-.logout-btn {
-  background: var(--primary-color);
-  color: white;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: var(--transition);
-  border: none;
-  cursor: pointer;
-}
-
-.logout-btn:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
-}
-
+/* ===== HOME CONTENT ===== */
 .home-main {
   max-width: 1200px;
   margin: 0 auto;
@@ -94,6 +80,7 @@
   }
 }
 
+/* ===== HERO SECTION ===== */
 .hero-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -125,11 +112,6 @@
 .hero-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.hero-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
 }
 
 .hero-card h3 {
@@ -175,6 +157,7 @@
   box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
 }
 
+/* ===== FEATURES SECTION ===== */
 .features-section {
   background: white;
   padding: 40px 30px;
@@ -199,17 +182,12 @@
   text-align: center;
   padding: 25px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #d8f7fc  100%);
+  background: linear-gradient(135deg, #f5f7fa 0%, #d8f7fc 100%);
   transition: var(--transition);
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-}
-
-.feature-icon {
-  font-size: 40px;
-  margin-bottom: 15px;
 }
 
 .feature-card h4 {
@@ -223,6 +201,74 @@
   font-size: 14px;
 }
 
+/* ===== USER MENU (NOVO) ===== */
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.user-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  color: #333;
+}
+
+.user-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Popup */
+.menu-popup {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  min-width: 150px;
+  z-index: 200;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Itens do popup */
+.menu-item {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.menu-item:hover {
+  background: #f5f5f5;
+}
+
+.menu-item.logout {
+  color: #e53935;
+}
+
+/* Animação suave */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .home-header {
     flex-direction: column;

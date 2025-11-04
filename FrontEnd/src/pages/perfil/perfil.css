@@ -1,0 +1,316 @@
+.perfil-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eeeeee 0%, #a2a1a1 50%, #525252 75%, #313131 100%);
+  padding: 0;
+}
+
+.perfil-main {
+  max-width: 1200px;
+  margin: 30px auto;
+  display: flex;
+  gap: 40px;
+  padding: 30px 20px;
+  position: relative; 
+  min-height: calc(100vh - 200px);
+}
+
+.perfil-sidebar {
+  flex: 0 0 300px;
+  background: white;
+  padding: 30px 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  height: fit-content;
+}
+
+.perfil-avatar {
+  font-size: 60px; 
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 50%;
+}
+
+.perfil-info {
+  text-align: center;
+  width: 100%;
+}
+
+.perfil-joined {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.perfil-joined .icon {
+  color: #3b82f6;
+}
+
+.perfil-email {
+  display: block;
+  color: #3b82f6;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.perfil-email:hover {
+  text-decoration: underline;
+}
+
+.perfil-stats {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 20px;
+}
+
+.perfil-stats div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.perfil-stats span {
+  color: #4b5563;
+}
+
+.perfil-stats .stat {
+  background: #3b82f6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.perfil-actions {
+  width: 100%;
+}
+
+.perfil-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #10b981;
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.perfil-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+.perfil-content {
+  flex: 1;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.perfil-header h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.perfil-preferences h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: #111827;
+}
+
+.perfil-preferences p {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.perfil-preferences {
+  display: none;
+}
+
+.perfil-trips {
+  margin-top: 30px;
+}
+
+.perfil-trips h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.trips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.trip-card {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.trip-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.trip-card h3 {
+  font-size: 18px;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.trip-card p {
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.trip-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.trip-status.saved {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.trip-status.planned {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.no-trips {
+  text-align: center;
+  color: #6b7280;
+  padding: 40px 20px;
+}
+
+.no-trips button {
+  display: inline-block;
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.no-trips button:hover {
+  text-decoration: underline;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 8px;
+}
+
+.back-btn:hover {
+  color: #3b82f6;
+}
+
+.logout-link {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.logout-link:hover {
+  color: #ff5252;
+}
+
+.navbar-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logout {
+  color: #666;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.nav-logout:hover {
+  color: #ff5252;
+}
+
+@media (max-width: 768px) {
+  .perfil-main {
+    flex-direction: column;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .perfil-sidebar {
+    flex: none;
+    width: 100%;
+  }
+
+  .perfil-content {
+    padding: 20px;
+  }
+
+  .logout-link {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    text-align: center;
+    margin-top: 40px;
+    display: block;
+  }
+}
