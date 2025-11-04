@@ -1,6 +1,7 @@
 "use client"
 import { useNavigate } from "react-router-dom"
 import "./home.css"
+import Footer from "../footer/footer" 
 
 export default function Home({ user, onLogout }) {
   const navigate = useNavigate()
@@ -18,7 +19,7 @@ export default function Home({ user, onLogout }) {
     <div className="home-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1 className="navbar-title">✈️ Planejador+</h1>
+          <h1 className="navbar-title">✈️ Viagem+</h1>
           <button className="logout-btn" onClick={handleLogout}>
             Sair
           </button>
@@ -80,6 +81,7 @@ export default function Home({ user, onLogout }) {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }
