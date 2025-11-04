@@ -31,7 +31,7 @@ export default function Home({ user, onLogout }) {
             <h2>Bem-vindo, {displayName}!</h2>
             <p>Organize sua próxima aventura incrível</p>
           </div>
-          <div className="header-emoji"></div>
+          <div className="header-emoji">🗺</div>
         </div>
 
         <div className="hero-section">

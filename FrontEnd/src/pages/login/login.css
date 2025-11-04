@@ -1,7 +1,7 @@
 .login-container {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+  background: linear-gradient(135deg, #eeeeee 0%, #a2a1a1 50%, #525252 75%, #313131 100%);
   align-items: center;
   justify-content: center;
   padding: 20px;
@@ -36,7 +36,7 @@
 
 .login-header h1 {
   font-size: 32px;
-  color: var(--primary-color);
+  color: linear-gradient(135deg, #525252 0%, #313131 100%);
   margin-bottom: 10px;
 }
 
@@ -74,7 +74,7 @@
 .form-group input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+  box-shadow: 0 0 0 3px rgba(107, 171, 255, 0.1);
 }
 
 .error-message {
@@ -87,7 +87,7 @@
 }
 
 .login-btn {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  background: linear-gradient(135deg, #525252 0%, #313131 100%);
   color: white;
   padding: 12px;
   border-radius: 8px;
@@ -99,7 +99,7 @@
 
 .login-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 6px 20px rgba(65, 65, 65, 0.4);
 }
 
 .login-toggle {
@@ -111,7 +111,7 @@
 
 .toggle-btn {
   background: none;
-  color: var(--primary-color);
+  color: linear-gradient(135deg, #525252 0%, #313131 100%);;
   font-weight: 600;
   cursor: pointer;
   margin-left: 5px;

@@ -129,7 +129,7 @@ export default function Login({ onLogin }) {
       </div>
 
       <div className="login-illustration">
-        <div className="travel-icon">🌍</div>
+        <div className="travel-icon">🗺</div>
         <p>Planeje suas aventuras incríveis</p>
       </div>
     </div>
