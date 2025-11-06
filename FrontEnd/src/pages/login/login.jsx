@@ -4,6 +4,16 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./login.css"
 
+async function apiSignUp(email, password) {
+  // Substitua este bloco pela sua chamada HTTP real (ex: fetch, axios)
+  return { id: Date.now(), email, password, trips: [] }; 
+}
+
+async function apiLogin(email, password) {
+  // Substitua este bloco pela sua chamada HTTP real (ex: fetch, axios)
+  return { id: 1, email, password, trips: [] }; 
+}
+
 export default function Login({ onLogin }) {
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
@@ -11,8 +21,9 @@ export default function Login({ onLogin }) {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
 
@@ -32,32 +43,25 @@ export default function Login({ onLogin }) {
       }
     }
 
-    
-    const users = JSON.parse(localStorage.getItem("users")) || []
+    setIsLoading(true);
 
-    if (isSignUp) {
-     
-      if (users.some((u) => u.email === email)) {
-        setError("Este email já está cadastrado")
-        return
+    try {
+      let user;
+      
+      if (isSignUp) {
+        user = await apiSignUp(email, password);
+      } else {
+        user = await apiLogin(email, password);
       }
-     
-      const newUser = { id: Date.now(), email, password, trips: [] }
-      users.push(newUser)
-      localStorage.setItem("users", JSON.stringify(users))
-    } else {
-     
-      const user = users.find((u) => u.email === email && u.password === password)
-      if (!user) {
-        setError("Email ou senha incorretos")
-        return
-      }
+
+      onLogin(user);
+      navigate("/home");
+
+    } catch (err) {
+      setError(err.message || "Ocorreu um erro. Tente novamente.");
+    } finally {
+      setIsLoading(false);
     }
-
-  
-    const user = users.find((u) => u.email === email)
-    onLogin(user)
-    navigate("/home")
   }
 
   return (
@@ -77,6 +81,7 @@ export default function Login({ onLogin }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Endereço de email"
+              disabled={isLoading}
             />
           </div>
 
@@ -88,6 +93,7 @@ export default function Login({ onLogin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              disabled={isLoading}
             />
           </div>
 
@@ -100,14 +106,15 @@ export default function Login({ onLogin }) {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
+                disabled={isLoading}
               />
             </div>
           )}
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" className="login-btn">
-            {isSignUp ? "Criar Conta" : "Entrar"}
+          <button type="submit" className="login-btn" disabled={isLoading}>
+            {isLoading ? "Aguarde..." : (isSignUp ? "Criar Conta" : "Entrar")}
           </button>
         </form>
 
@@ -121,6 +128,7 @@ export default function Login({ onLogin }) {
                 setIsSignUp(!isSignUp)
                 setError("")
               }}
+              disabled={isLoading}
             >
               {isSignUp ? "Faça Login" : "Crie agora"}
             </button>

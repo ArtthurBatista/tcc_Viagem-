@@ -4,6 +4,54 @@ import { useState, useEffect, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import "./detalhes-viagem.css"
 
+// >>> ATENÇÃO: Você precisa implementar as seguintes funções de API! <<<
+// Elas devem buscar e persistir os dados da viagem no seu backend.
+
+// Função Fictícia para carregar dados da viagem do Backend
+async function apiLoadTrip(userId, tripId) {
+  // Substitua este bloco pela sua chamada HTTP real (ex: fetch, axios)
+  console.log(`API: Buscando viagem ${tripId} para o usuário ${userId}...`);
+  // Exemplo de como a resposta do backend deve ser estruturada:
+  // return { 
+  //   id: Number(tripId), 
+  //   name: "Minha Viagem", 
+  //   destination: "Local", 
+  //   startDate: new Date().toISOString(), 
+  //   endDate: new Date().toISOString(), 
+  //   expenses: [], 
+  //   packingList: [] 
+  // }; 
+
+  // Simulação de retorno de dados (Para Testes)
+  return { 
+    id: Number(tripId), 
+    name: "Viagem para Paris", 
+    destination: "Paris, França", 
+    startDate: new Date(2025, 6, 15).toISOString(), 
+    endDate: new Date(2025, 6, 22).toISOString(), 
+    description: "Uma semana romântica na cidade luz.",
+    expenses: [
+      { id: 101, description: "Passagens aéreas", amount: 3500.00, category: "transporte" },
+      { id: 102, description: "Jantar na Torre", amount: 500.00, category: "alimentação" },
+    ], 
+    packingList: [
+      { id: 201, text: "Passaporte", packed: true },
+      { id: 202, text: "Carregador", packed: false },
+    ]
+  };
+}
+
+// Função Fictícia para salvar dados da viagem no Backend
+async function apiSaveTrip(userId, updatedTrip) {
+  // Substitua este bloco pela sua chamada HTTP real (ex: fetch, axios)
+  console.log(`API: Salvando viagem ${updatedTrip.id} para o usuário ${userId}...`, updatedTrip);
+  // O backend deve salvar a viagem e retornar a versão atualizada
+  // return updatedTrip; 
+  return updatedTrip;
+}
+
+// ----------------------------------------------------------------------
+
 export default function TripDetails({ user, onLogout }) {
   const navigate = useNavigate()
   const { tripId } = useParams()
@@ -13,21 +61,19 @@ export default function TripDetails({ user, onLogout }) {
   const [newPackingItem, setNewPackingItem] = useState("")
   const [editingExpenseId, setEditingExpenseId] = useState(null)
   
-  // ⭐️ CORREÇÃO: Variáveis de estado e referência para o menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef(null)
+  const [isLoading, setIsLoading] = useState(false)
 
-  // ⭐️ CORREÇÃO: Função para abrir/fechar o menu
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev)
   }
 
-  // Efeito para carregar a viagem
+  // Carrega a viagem ao montar o componente
   useEffect(() => {
     loadTrip()
-  }, [tripId])
+  }, [tripId, user])
 
-  // ⭐️ CORREÇÃO: Efeito para fechar o menu ao clicar fora
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -41,29 +87,30 @@ export default function TripDetails({ user, onLogout }) {
   }, [])
 
 
-  const loadTrip = () => {
-    const users = JSON.parse(localStorage.getItem("users")) || []
-    const currentUser = users.find((u) => u.id === user.id)
-    if (currentUser && currentUser.trips) {
-      const foundTrip = currentUser.trips.find((t) => t.id === Number.parseInt(tripId))
-      if (foundTrip) {
-        setTrip(foundTrip)
-      }
+  const loadTrip = async () => {
+    if (!user || !tripId) return;
+    setIsLoading(true);
+    try {
+        const foundTrip = await apiLoadTrip(user.id, tripId);
+        setTrip(foundTrip);
+    } catch (error) {
+        console.error("Erro ao carregar viagem:", error);
+        // Tratar erro (ex: viagem não encontrada)
+    } finally {
+        setIsLoading(false);
     }
   }
 
-  const saveTrip = (updatedTrip) => {
-    const users = JSON.parse(localStorage.getItem("users")) || []
-    const userIndex = users.findIndex((u) => u.id === user.id)
-
-    if (userIndex !== -1) {
-      const tripIndex = users[userIndex].trips.findIndex((t) => t.id === Number.parseInt(tripId))
-      if (tripIndex !== -1) {
-        users[userIndex].trips[tripIndex] = updatedTrip
-        localStorage.setItem("users", JSON.stringify(users))
-        localStorage.setItem("currentUser", JSON.stringify(users[userIndex]))
-        setTrip(updatedTrip)
-      }
+  const saveTrip = async (updatedTrip) => {
+    setIsLoading(true);
+    try {
+        const savedTrip = await apiSaveTrip(user.id, updatedTrip);
+        setTrip(savedTrip);
+    } catch (error) {
+        console.error("Erro ao salvar viagem:", error);
+        // Tratar erro
+    } finally {
+        setIsLoading(false);
     }
   }
 
@@ -138,10 +185,10 @@ export default function TripDetails({ user, onLogout }) {
     navigate("/login")
   }
 
-  if (!trip) {
+  if (!trip || isLoading) {
     return (
       <div className="loading-container">
-        <p>Carregando...</p>
+        <p>{isLoading ? "Carregando detalhes da viagem..." : "Carregando..."}</p>
       </div>
     )
   }
@@ -228,16 +275,22 @@ export default function TripDetails({ user, onLogout }) {
             <button
               className={`tab-btn ${activeTab === "expenses" ? "active" : ""}`}
               onClick={() => setActiveTab("expenses")}
+              disabled={isLoading}
             >
               Gastos ({trip.expenses?.length || 0})
             </button>
             <button
               className={`tab-btn ${activeTab === "packing" ? "active" : ""}`}
               onClick={() => setActiveTab("packing")}
+              disabled={isLoading}
             >
               Lista de Coisas ({trip.packingList?.length || 0})
             </button>
-            <button className={`tab-btn ${activeTab === "info" ? "active" : ""}`} onClick={() => setActiveTab("info")}>
+            <button 
+                className={`tab-btn ${activeTab === "info" ? "active" : ""}`} 
+                onClick={() => setActiveTab("info")}
+                disabled={isLoading}
+            >
               Informações
             </button>
           </div>
@@ -253,6 +306,7 @@ export default function TripDetails({ user, onLogout }) {
                     value={newExpense.description}
                     onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
                     placeholder="Descrição do gasto (ex: Hotel, Comida, Transporte)"
+                    disabled={isLoading}
                   />
                 </div>
                 <div className="form-row">
@@ -263,12 +317,14 @@ export default function TripDetails({ user, onLogout }) {
                       onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
                       placeholder="Valor"
                       step="0.01"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="form-group">
                     <select
                       value={newExpense.category}
                       onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
+                      disabled={isLoading}
                     >
                       <option value="alimentação">Alimentação</option>
                       <option value="hospedagem">Hospedagem</option>
@@ -279,7 +335,7 @@ export default function TripDetails({ user, onLogout }) {
                     </select>
                   </div>
                 </div>
-                <button className="add-btn" onClick={handleAddExpense}>
+                <button className="add-btn" onClick={handleAddExpense} disabled={isLoading}>
                   Adicionar Gasto
                 </button>
               </div>
@@ -312,7 +368,7 @@ export default function TripDetails({ user, onLogout }) {
                             <span className="expense-amount">R$ {expense.amount.toFixed(2)}</span>
                           </div>
                         </div>
-                        <button className="delete-expense-btn" onClick={() => handleDeleteExpense(expense.id)}>
+                        <button className="delete-expense-btn" onClick={() => handleDeleteExpense(expense.id)} disabled={isLoading}>
                           ✕
                         </button>
                       </div>
@@ -339,9 +395,10 @@ export default function TripDetails({ user, onLogout }) {
                     onChange={(e) => setNewPackingItem(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && handleAddPackingItem()}
                     placeholder="Ex: Passaporte, Mala, Protetor Solar..."
+                    disabled={isLoading}
                   />
                 </div>
-                <button className="add-btn" onClick={handleAddPackingItem}>
+                <button className="add-btn" onClick={handleAddPackingItem} disabled={isLoading}>
                   Adicionar Item
                 </button>
               </div>
@@ -367,9 +424,10 @@ export default function TripDetails({ user, onLogout }) {
                           checked={item.packed}
                           onChange={() => handleTogglePackingItem(item.id)}
                           className="packing-checkbox"
+                          disabled={isLoading}
                         />
                         <span className="packing-text">{item.text}</span>
-                        <button className="delete-packing-btn" onClick={() => handleDeletePackingItem(item.id)}>
+                        <button className="delete-packing-btn" onClick={() => handleDeletePackingItem(item.id)} disabled={isLoading}>
                           ✕
                         </button>
                       </div>
