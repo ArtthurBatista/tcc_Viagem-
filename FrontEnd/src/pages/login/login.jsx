@@ -64,7 +64,7 @@ export default function Login({ onLogin }) {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h1>✈️ Planejador+</h1>
+          <h1>✈️ Viagem+</h1>
           <p>{isSignUp ? "Crie sua conta" : "Bem-vindo de volta"}</p>
         </div>
 
@@ -76,7 +76,7 @@ export default function Login({ onLogin }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
+              placeholder="Endereço de email"
             />
           </div>
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import "./detalhes-viagem.css"
 
@@ -12,10 +12,34 @@ export default function TripDetails({ user, onLogout }) {
   const [newExpense, setNewExpense] = useState({ description: "", amount: "", category: "alimentação" })
   const [newPackingItem, setNewPackingItem] = useState("")
   const [editingExpenseId, setEditingExpenseId] = useState(null)
+  
+  // ⭐️ CORREÇÃO: Variáveis de estado e referência para o menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const menuRef = useRef(null)
 
+  // ⭐️ CORREÇÃO: Função para abrir/fechar o menu
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev)
+  }
+
+  // Efeito para carregar a viagem
   useEffect(() => {
     loadTrip()
   }, [tripId])
+
+  // ⭐️ CORREÇÃO: Efeito para fechar o menu ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
 
   const loadTrip = () => {
     const users = JSON.parse(localStorage.getItem("users")) || []
@@ -137,9 +161,40 @@ export default function TripDetails({ user, onLogout }) {
             <button className="nav-btn" onClick={() => navigate("/my-trips")}>
               Minhas Viagens
             </button>
-            <button className="logout-btn" onClick={handleLogout}>
-              Sair
-            </button>
+            <div className="user-menu" ref={menuRef}>
+              <button
+                className={`user-btn ${isMenuOpen ? "open" : ""}`}
+                onClick={toggleMenu}
+                aria-haspopup="true"
+                aria-expanded={isMenuOpen}
+                title="Abrir menu do usuário"
+              >
+                <span role="img" aria-label="user">👤</span>
+              </button>
+
+              {isMenuOpen && (
+                <div className="menu-popup" role="menu">
+                  <button
+                    className="menu-item"
+                    onClick={() => {
+                      setIsMenuOpen(false)
+                      navigate("/user-profile")
+                    }}
+                  >
+                    Ver Perfil
+                  </button>
+                  <button
+                    className="menu-item logout"
+                    onClick={() => {
+                      setIsMenuOpen(false)
+                      handleLogout()
+                    }}
+                  >
+                    Sair
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -174,20 +229,20 @@ export default function TripDetails({ user, onLogout }) {
               className={`tab-btn ${activeTab === "expenses" ? "active" : ""}`}
               onClick={() => setActiveTab("expenses")}
             >
-               Gastos ({trip.expenses?.length || 0})
+              Gastos ({trip.expenses?.length || 0})
             </button>
             <button
               className={`tab-btn ${activeTab === "packing" ? "active" : ""}`}
               onClick={() => setActiveTab("packing")}
             >
-               Lista de Coisas ({trip.packingList?.length || 0})
+              Lista de Coisas ({trip.packingList?.length || 0})
             </button>
             <button className={`tab-btn ${activeTab === "info" ? "active" : ""}`} onClick={() => setActiveTab("info")}>
-               Informações
+              Informações
             </button>
           </div>
 
-          
+
           {activeTab === "expenses" && (
             <div className="tab-content">
               <div className="add-expense-form">
@@ -272,7 +327,7 @@ export default function TripDetails({ user, onLogout }) {
             </div>
           )}
 
-          
+
           {activeTab === "packing" && (
             <div className="tab-content">
               <div className="add-packing-form">
@@ -329,7 +384,7 @@ export default function TripDetails({ user, onLogout }) {
             </div>
           )}
 
-          
+
           {activeTab === "info" && (
             <div className="tab-content">
               <div className="trip-info-section">

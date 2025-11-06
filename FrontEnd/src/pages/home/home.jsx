@@ -4,18 +4,89 @@ import { useState, useEffect, useRef } from "react"
 import "./home.css"
 import Footer from "../footer/footer"
 
+const popularDestinations = [
+  {
+    id: 1,
+    name: "Ilhas Gregas",
+    location: "Santorini, Grécia",
+    description: "Casas brancas com cúpulas azuis e pôr do sol inesquecíveis sobre o Mar Egeu",
+    image: "/images/santorini.jpg",
+  },
+  {
+    id: 2,
+    name: "Alpes Suíços",
+    location: "Suíça",
+    description: "Montanhas majestosas, trilhas alpinas e paisagens de tirar o fôlego",
+    image: "/images/swiss_alps.jpg",
+  },
+  {
+    id: 3,
+    name: "Cidade Vibrante",
+    location: "Tóquio, Japão",
+    description: "Luzes neon, tecnologia de ponta e cultura milenar em harmonia",
+    image: "/images/tokyo.jpg",
+  },
+  {
+    id: 4,
+    name: "Refúgio Tropical",
+    location: "Bali, Indonésia",
+    description: "Terraços de arroz verde-esmeralda e templos sagrados na ilha dos deuses",
+    image: "/images/bali.jpg",
+  },
+  {
+    id: 5,
+    name: "Paraíso Luxuoso",
+    location: "Maldivas",
+    description: "Vilas sobre a água com o oceano turquesa mais claro do mundo",
+    image: "/images/maldives.jpg",
+  },
+  {
+    id: 6,
+    name: "Cidade Luz",
+    location: "Paris, França",
+    description: "Cultura, arte, romance e a icônica Torre Eiffel ao pôr do sol",
+    image: "/images/paris.jpg",
+  },
+]
+
+function PopularDestinationsSection() {
+  return (
+    <section className="destinations-section">
+      <div className="section-header">
+        <h3 className="section-title">Destinos Populares</h3>
+        <p className="section-subtitle">Explore os lugares mais incríveis do mundo</p>
+      </div>
+      <div className="destinations-grid">
+        {popularDestinations.map((destination) => (
+          <div key={destination.id} className="destination-card">
+            <div className="destination-image-wrapper">
+              <div className="placeholder-image" style={{backgroundImage: `url(${destination.image})`}} title={destination.name}>
+              </div>
+            </div>
+            <div className="destination-info">
+              <p className="destination-location">
+                <span role="img" aria-label="pin">📍</span> {destination.location}
+              </p>
+              <h4 className="destination-name">{destination.name}</h4>
+              <p className="destination-description">{destination.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 export default function Home({ user, onLogout }) {
   const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
-  // Add capitalize function
   const capitalize = (str) => {
     if (!str) return ''
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
   }
 
-  // Get user's first name from email
   const userName = capitalize(user?.email?.split('@')[0]) || 'Usuário'
 
   const toggleMenu = () => {
@@ -27,7 +98,6 @@ export default function Home({ user, onLogout }) {
     navigate("/login")
   }
 
-  // Fecha o menu se clicar fora
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -43,9 +113,8 @@ export default function Home({ user, onLogout }) {
     <div className="home-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1 className="navbar-title">✈️ Viagem+</h1>
+          <h1 className="navbar-title"> Viagem+</h1>
 
-          {/* Ícone de usuário clean */}
           <div className="user-menu" ref={menuRef}>
             <button className="user-btn" onClick={toggleMenu}>
               <span role="img" aria-label="user">👤</span>
@@ -103,6 +172,8 @@ export default function Home({ user, onLogout }) {
             </button>
           </div>
         </div>
+        
+        <PopularDestinationsSection />
 
         <div className="features-section">
           <h3>Por que usar o Viagem+?</h3>
