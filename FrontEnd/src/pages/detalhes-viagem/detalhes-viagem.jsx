@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import "./detalhes-viagem.css"
+import ChatWidget from "../../components/ChatWidget/ChatWidget"
 
 export default function TripDetails({ user, onLogout }) {
   const navigate = useNavigate()
@@ -379,6 +380,7 @@ export default function TripDetails({ user, onLogout }) {
           )}
         </div>
       </main>
+      <ChatWidget />
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
 import "./home.css"
 import Footer from "../footer/footer"
+import ChatWidget from "../../components/ChatWidget/ChatWidget"
 
 export default function Home({ user, onLogout }) {
   const navigate = useNavigate()
@@ -128,6 +129,7 @@ export default function Home({ user, onLogout }) {
       </main>
 
       <Footer />
+      <ChatWidget />
     </div>
   )
 }

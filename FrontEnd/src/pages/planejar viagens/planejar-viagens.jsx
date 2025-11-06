@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./planejar-viagens.css"
+import ChatWidget from "../../components/ChatWidget/ChatWidget"
 
 export default function PlanTrip({ user, onLogout }) {
   const navigate = useNavigate()
@@ -186,6 +187,7 @@ export default function PlanTrip({ user, onLogout }) {
           </div>
         </div>
       </main>
+      <ChatWidget />
     </div>
   )
 }

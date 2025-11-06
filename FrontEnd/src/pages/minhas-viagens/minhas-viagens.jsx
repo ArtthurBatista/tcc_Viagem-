@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import "./minhas-viagens.css"
+import ChatWidget from "../../components/ChatWidget/ChatWidget"
 
 export default function MyTrips({ user, onLogout }) {
   const navigate = useNavigate()
@@ -197,6 +198,7 @@ export default function MyTrips({ user, onLogout }) {
           )}
         </div>
       </main>
+      <ChatWidget />
     </div>
   )
 }

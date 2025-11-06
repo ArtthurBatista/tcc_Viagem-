@@ -4,6 +4,7 @@ import { Calendar, Plane } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import "./Perfil.css"
+import ChatWidget from "../../components/ChatWidget/ChatWidget"
 
 export default function Perfil({ user, onLogout }) {
   const navigate = useNavigate()
@@ -125,6 +126,7 @@ export default function Perfil({ user, onLogout }) {
           </div>
         </section>
       </div>
+      <ChatWidget />
     </div>
   )
 }
