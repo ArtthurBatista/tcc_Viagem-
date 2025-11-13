@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './chatbot.css';
 
 
-const Chatbot = ({ onClose }) => {
+const Chatbot = ({ aoFechar }) => {
+    const navegar = useNavigate();
     const [mensagens, setMensagens] = useState([
-        { text: 'Oi! Tudo bem? Como posso te ajudar com sua viagem hoje?', isAi: true }
+        { texto: 'Olá! 👋 Sou o Viajante+, seu assistente de viagens! Estou aqui para te ajudar a planejar sua próxima aventura.\n\nPosso te auxiliar com:\n* Criar e planejar novas viagens\n* Sugestões de destinos e roteiros\n* Dicas sobre hospedagem, alimentação e transporte\n* Informações sobre documentação e melhor época para viajar\n\nComo posso te ajudar hoje? 🌍✈️', ehIA: true }
     ]);
     const [mensagemAtual, setMensagemAtual] = useState('');
     const [carregando, setCarregando] = useState(false);
@@ -16,36 +18,60 @@ const Chatbot = ({ onClose }) => {
 
     // Função para formatar o texto com quebras de linha e markdown
     const formatarTexto = (texto) => {
-        // Divide o texto em linhas
-        const linhas = texto.split('\n');
+        // Primeiro, processa os botões
+        const partes = texto.split(/(\[BOTAO:\/[^\]]+\][^\[]+\[\/BOTAO\])/g);
         
-        return linhas.map((linha, index) => {
-            // Remove espaços no início e fim da linha
-            let linhaTrimmed = linha.trim();
-            
-            // Verifica se é um item de lista (começa com * ou -)
-            if (linhaTrimmed.startsWith('* ') || linhaTrimmed.startsWith('- ')) {
-                const textoLista = linhaTrimmed.substring(2);
+        return partes.map((parte, parteIndex) => {
+            // Verifica se é um botão
+            const botaoMatch = parte.match(/\[BOTAO:(\/[^\]]+)\]([^\[]+)\[\/BOTAO\]/);
+            if (botaoMatch) {
+                const rota = botaoMatch[1];
+                const textoBotao = botaoMatch[2];
                 return (
-                    <div key={index} className="list-item">
-                        <span className="bullet">•</span>
-                        <span dangerouslySetInnerHTML={{ __html: processarMarkdown(textoLista) }} />
-                    </div>
+                    <button
+                        key={`botao-${parteIndex}`}
+                        className="botao-acao-chat"
+                        onClick={() => {
+                            navegar(rota);
+                            aoFechar();
+                        }}
+                    >
+                        {textoBotao}
+                    </button>
                 );
             }
             
-            // Verifica se é uma linha vazia (para criar espaçamento)
-            if (linhaTrimmed === '') {
-                return <div key={index} className="paragraph-break"></div>;
-            }
+            // Se não é botão, processa como texto normal
+            const linhas = parte.split('\n');
             
-            // Linha normal - processa markdown
-            return (
-                <React.Fragment key={index}>
-                    <span dangerouslySetInnerHTML={{ __html: processarMarkdown(linhaTrimmed) }} />
-                    {index < linhas.length - 1 && <br />}
-                </React.Fragment>
-            );
+            return linhas.map((linha, index) => {
+                // Remove espaços no início e fim da linha
+                let linhaTrimmed = linha.trim();
+                
+                // Verifica se é um item de lista (começa com * ou -)
+                if (linhaTrimmed.startsWith('* ') || linhaTrimmed.startsWith('- ')) {
+                    const textoLista = linhaTrimmed.substring(2);
+                    return (
+                        <div key={`${parteIndex}-${index}`} className="item-lista">
+                            <span className="marcador">•</span>
+                            <span dangerouslySetInnerHTML={{ __html: processarMarkdown(textoLista) }} />
+                        </div>
+                    );
+                }
+                
+                // Verifica se é uma linha vazia (para criar espaçamento)
+                if (linhaTrimmed === '') {
+                    return <div key={`${parteIndex}-${index}`} className="quebra-paragrafo"></div>;
+                }
+                
+                // Linha normal - processa markdown
+                return (
+                    <React.Fragment key={`${parteIndex}-${index}`}>
+                        <span dangerouslySetInnerHTML={{ __html: processarMarkdown(linhaTrimmed) }} />
+                        {index < linhas.length - 1 && <br />}
+                    </React.Fragment>
+                );
+            });
         });
     };
 
@@ -65,7 +91,7 @@ const Chatbot = ({ onClose }) => {
         e.preventDefault();
         if (!mensagemAtual.trim()) return;
 
-        const novaMensagem = { text: mensagemAtual, isAi: false };
+        const novaMensagem = { texto: mensagemAtual, ehIA: false };
         setMensagens(antigas => [...antigas, novaMensagem]);
         const textoEnviado = mensagemAtual;
         setMensagemAtual('');
@@ -77,7 +103,7 @@ const Chatbot = ({ onClose }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: textoEnviado,
-                    context: mensagens.slice(-5).map(m => ({ text: m.text, isAi: m.isAi }))
+                    context: mensagens.slice(-5).map(m => ({ text: m.texto, isAi: m.ehIA }))
                 })
             });
 
@@ -86,12 +112,12 @@ const Chatbot = ({ onClose }) => {
             }
 
             const dados = await resposta.json();
-            setMensagens(antigas => [...antigas, { text: dados.response, isAi: true }]);
+            setMensagens(antigas => [...antigas, { texto: dados.response, ehIA: true }]);
         } catch (erro) {
             console.error('Erro:', erro);
             setMensagens(antigas => [...antigas, { 
-                text: 'Desculpe, tive um problema aqui! Pode tentar de novo?', 
-                isAi: true 
+                texto: 'Desculpe, tive um problema aqui! Pode tentar de novo?', 
+                ehIA: true 
             }]);
         } finally {
             setCarregando(false);
@@ -99,38 +125,38 @@ const Chatbot = ({ onClose }) => {
     };
 
     return (
-        <div className="chatbot-overlay" onClick={onClose}>
-            <div className="chatbot-container" onClick={(e) => e.stopPropagation()}>
-                <div className="chat-popup">
-                    <div className="chat-header">
-                        <div className="head-info">
-                            <img src="/public/Chatbot.ico" alt="Viajante+" className="chat-icon" />
-                            <h2 className="logo-text">Viajante+</h2>
-                            <button className='close-button' onClick={onClose}>
-                                <span className="arrow-down"></span>
+        <div className="sobreposicao-chatbot" onClick={aoFechar}>
+            <div className="container-chatbot" onClick={(e) => e.stopPropagation()}>
+                <div className="popup-chat">
+                    <div className="cabecalho-chat">
+                        <div className="info-cabecalho">
+                            <img src="/public/Chatbot.ico" alt="Viajante+" className="icone-chat" />
+                            <h2 className="texto-logo">Viajante+</h2>
+                            <button className='botao-fechar' onClick={aoFechar}>
+                                <span className="seta-baixo"></span>
                             </button>
                         </div>
                     </div>
-                <div className="chat-messages">
+                <div className="mensagens-chat">
                     {mensagens.map((msg, idx) => (
-                        <div key={idx} className={`message ${msg.isAi ? 'ai' : 'user'}`}>
-                            {msg.isAi && (
-                                <div className="ai-avatar">
+                        <div key={idx} className={`mensagem ${msg.ehIA ? 'ia' : 'usuario'}`}>
+                            {msg.ehIA && (
+                                <div className="avatar-ia">
                                     <img src="/public/Chatbot.ico" alt="Viajante+" />
                                 </div>
                             )}
-                            <div className="message-content">
-                                {formatarTexto(msg.text)}
+                            <div className="conteudo-mensagem">
+                                {formatarTexto(msg.texto)}
                             </div>
                         </div>
                     ))}
                     {carregando && (
-                        <div className="message ai">
-                            <div className="ai-avatar">
+                        <div className="mensagem ia">
+                            <div className="avatar-ia">
                                 <img src="/public/Chatbot.ico" alt="Viajante+" />
                             </div>
-                            <div className="message-content typing">
-                                <div className="typing-indicator">
+                            <div className="conteudo-mensagem digitando">
+                                <div className="indicador-digitacao">
                                     <span></span>
                                     <span></span>
                                     <span></span>
@@ -140,7 +166,7 @@ const Chatbot = ({ onClose }) => {
                     )}
                     <div ref={fimDasMensagens} />
                 </div>
-                <form onSubmit={enviarMensagem} className="chat-input">
+                <form onSubmit={enviarMensagem} className="entrada-chat">
                     <input
                         type="text"
                         value={mensagemAtual}
@@ -151,7 +177,7 @@ const Chatbot = ({ onClose }) => {
                     <button 
                         type="submit" 
                         disabled={carregando || !mensagemAtual.trim()}
-                        className="send-button"
+                        className="botao-enviar"
                     >
                         <span className="material-symbols-outlined">Enviar</span>
                     </button>

@@ -1,14 +1,14 @@
 /* Variáveis CSS para fácil customização */
 :root {
-  --widget-bg: #1a1a2e;
-  --widget-bg-hover: #16213e;
-  --widget-text: #ffffff;
-  --widget-shadow: rgba(0, 0, 0, 0.3);
-  --widget-border: #0f3460;
-  --widget-accent: #4ecdc4;
+  --cor-fundo-widget: #1a1a2e;
+  --cor-fundo-widget-hover: #16213e;
+  --cor-texto-widget: #ffffff;
+  --cor-sombra-widget: rgba(0, 0, 0, 0.3);
+  --cor-borda-widget: #0f3460;
+  --cor-destaque-widget: #4ecdc4;
 }
 
-.chat-widget {
+.widget-chat {
   position: fixed;
   bottom: 30px;
   right: 30px;
@@ -20,14 +20,14 @@
   gap: 12px;
   
   /* Estilo visual moderno */
-  background: var(--widget-bg);
-  color: var(--widget-text);
-  border: 2px solid var(--widget-border);
+  background: var(--cor-fundo-widget);
+  color: var(--cor-texto-widget);
+  border: 2px solid var(--cor-borda-widget);
   border-radius: 50px;
   padding: 12px 20px 12px 12px;
   
   /* Sombra suave */
-  box-shadow: 0 4px 12px var(--widget-shadow);
+  box-shadow: 0 4px 12px var(--cor-sombra-widget);
   
   /* Cursor e transições */
   cursor: pointer;
@@ -41,7 +41,7 @@
 }
 
 /* Ícone do chatbot */
-.chat-widget-icon {
+.icone-widget-chat {
   width: 32px;
   height: 32px;
   object-fit: contain;
@@ -49,37 +49,37 @@
 }
 
 /* Texto do widget */
-.chat-widget-text {
+.texto-widget-chat {
   white-space: nowrap;
   letter-spacing: 0.3px;
 }
 
 /* Efeito de hover */
-.chat-widget:hover {
-  background: var(--widget-bg-hover);
-  border-color: var(--widget-accent);
+.widget-chat:hover {
+  background: var(--cor-fundo-widget-hover);
+  border-color: var(--cor-destaque-widget);
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
 }
 
-.chat-widget:hover .chat-widget-icon {
+.widget-chat:hover .icone-widget-chat {
   transform: scale(1.1) rotate(5deg);
 }
 
 /* Efeito de click/active */
-.chat-widget:active {
+.widget-chat:active {
   transform: translateY(-1px);
-  box-shadow: 0 3px 10px var(--widget-shadow);
+  box-shadow: 0 3px 10px var(--cor-sombra-widget);
 }
 
 /* Foco visível para acessibilidade */
-.chat-widget:focus-visible {
-  outline: 3px solid var(--widget-accent);
+.widget-chat:focus-visible {
+  outline: 3px solid var(--cor-destaque-widget);
   outline-offset: 3px;
 }
 
 /* Animação de entrada */
-@keyframes slideIn {
+@keyframes deslizarEntrada {
   from {
     opacity: 0;
     transform: translateX(100px);
@@ -90,20 +90,20 @@
   }
 }
 
-.chat-widget {
-  animation: slideIn 0.5s ease-out;
+.widget-chat {
+  animation: deslizarEntrada 0.5s ease-out;
 }
 
 /* Responsivo - tablets */
 @media (max-width: 768px) {
-  .chat-widget {
+  .widget-chat {
     bottom: 20px;
     right: 20px;
     padding: 10px 16px 10px 10px;
     font-size: 14px;
   }
   
-  .chat-widget-icon {
+  .icone-widget-chat {
     width: 28px;
     height: 28px;
   }
@@ -111,7 +111,7 @@
 
 /* Responsivo - mobile */
 @media (max-width: 480px) {
-  .chat-widget {
+  .widget-chat {
     bottom: 15px;
     right: 15px;
     padding: 8px 12px 8px 8px;
@@ -119,17 +119,17 @@
     gap: 8px;
   }
   
-  .chat-widget-icon {
+  .icone-widget-chat {
     width: 24px;
     height: 24px;
   }
   
   /* Opção: apenas ícone em telas muito pequenas */
-  .chat-widget-text {
+  .texto-widget-chat {
     display: none;
   }
   
-  .chat-widget {
+  .widget-chat {
     padding: 10px;
     border-radius: 50%;
     width: 56px;
@@ -141,23 +141,23 @@
 /* Tema claro (opcional) */
 @media (prefers-color-scheme: light) {
   :root {
-    --widget-bg: #ffffff;
-    --widget-bg-hover: #f5f5f5;
-    --widget-text: #1a1a2e;
-    --widget-border: #e0e0e0;
+    --cor-fundo-widget: #ffffff;
+    --cor-fundo-widget-hover: #f5f5f5;
+    --cor-texto-widget: #1a1a2e;
+    --cor-borda-widget: #e0e0e0;
   }
 }
 
 /* Animação de pulso sutil (opcional) */
-@keyframes pulse {
+@keyframes pulsar {
   0%, 100% {
-    box-shadow: 0 4px 12px var(--widget-shadow);
+    box-shadow: 0 4px 12px var(--cor-sombra-widget);
   }
   50% {
     box-shadow: 0 4px 12px rgba(78, 205, 196, 0.5);
   }
 }
 
-.chat-widget.pulse {
-  animation: pulse 2s infinite;
+.widget-chat.pulsar {
+  animation: pulsar 2s infinite;
 }

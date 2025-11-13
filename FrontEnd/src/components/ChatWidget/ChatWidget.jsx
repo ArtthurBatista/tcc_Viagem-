@@ -3,33 +3,33 @@ import Chatbot from '../../pages/chatbot/chatbot';
 import './ChatWidget.css';
 
 const ChatWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [estaAberto, setEstaAberto] = useState(false);
 
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
+  const alternarVisibilidade = () => {
+    setEstaAberto(!estaAberto);
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
+  const fechar = () => {
+    setEstaAberto(false);
   };
 
   return (
     <>
       <button 
-        className="chat-widget"
-        onClick={handleToggle}
+        className="widget-chat"
+        onClick={alternarVisibilidade}
         aria-label="Abrir Assistente Virtual"
         title="Assistente Virtual - Tire suas dúvidas sobre viagens"
       >
         <img 
           src="/Chatbot.ico" 
           alt="Chatbot" 
-          className="chat-widget-icon"
+          className="icone-widget-chat"
         />
-        <span className="chat-widget-text">Assistente Virtual</span>
+        <span className="texto-widget-chat">Assistente Virtual</span>
       </button>
       
-      {isOpen && <Chatbot onClose={handleClose} />}
+      {estaAberto && <Chatbot aoFechar={fechar} />}
     </>
   );
 };

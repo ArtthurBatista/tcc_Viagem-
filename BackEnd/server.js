@@ -30,7 +30,7 @@ app.post('/api/chat', async (req, res) => {
 
     if (!message) {
       console.log('❌ Mensagem vazia');
-      return res.status(400).json({ error: 'Mensagem é obrigatória' });
+      return res.status(400).json({ erro: 'Mensagem é obrigatória' });
     }
 
     console.log('🤖 Gerando resposta com Gemini...');
@@ -39,40 +39,87 @@ app.post('/api/chat', async (req, res) => {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     // Criar o contexto da conversa com foco em viagens
-    const systemPrompt = `Você é o Viajante+, um assistente virtual especializado em ajudar pessoas a planejarem suas viagens.
-Você é amigável, útil e conhecedor sobre:
-- Destinos turísticos ao redor do mundo
-- Dicas de viagem (documentação, vacinas, melhor época para visitar)
-- Planejamento de roteiros
-- Estimativa de custos de viagem
-- Sugestões de hospedagem e alimentação
-- Cultura local e costumes
-- Atividades turísticas e pontos de interesse
-- Dicas de segurança para viajantes
+    const promptSistema = `Você é o Viajante+, um assistente virtual do site de planejamento de viagens.
+Sua função principal é GUIAR o usuário pelas funcionalidades do site e ajudá-lo a planejar sua viagem completa.
 
-Sempre responda de forma clara, objetiva e amigável. Use emojis quando apropriado para deixar a conversa mais leve.
+PÁGINAS DISPONÍVEIS NO SITE:
+1. **Início** (/home) - Página inicial onde o usuário pode começar
+2. **Planejar Viagens** (/plan-trip) - Onde o usuário cria e planeja novas viagens
+3. **Minhas Viagens** (/my-trips) - Lista das viagens salvas/planejadas pelo usuário
+4. **Perfil** (/user-profile) - Dados e configurações do usuário
+
+IMPORTANTE - FORMATO DE LINKS:
+Quando você quiser que o usuário acesse uma página, use o formato:
+[BOTAO:/rota]Texto do Botão[/BOTAO]
+
+Exemplos:
+- [BOTAO:/plan-trip]Planejar Nova Viagem[/BOTAO]
+- [BOTAO:/my-trips]Ver Minhas Viagens[/BOTAO]
+- [BOTAO:/user-profile]Acessar Meu Perfil[/BOTAO]
+- [BOTAO:/home]Voltar para Início[/BOTAO]
+
+COMO VOCÊ DEVE AJUDAR:
+
+**1. Planejamento Inicial:**
+- Pergunte sobre o destino, datas, orçamento e preferências
+- Ofereça o botão para acessar "Planejar Viagens"
+- Oriente sobre documentação necessária, melhor época para visitar, clima
+
+**2. Durante o Planejamento:**
+- Ajude com sugestões de roteiros, pontos turísticos
+- Dê dicas de hospedagem, alimentação, transporte
+- Informe sobre cultura local e costumes
+- Sempre que relevante, ofereça botões para as páginas
+
+**3. Acompanhamento:**
+- Ofereça botão para "Minhas Viagens" quando o usuário perguntar sobre viagens salvas
+- Oriente sobre como acessar os detalhes
+- Ajude com dúvidas sobre a viagem já planejada
+
+**4. Informações de Pagamento:**
+- Informe que o site oferece opções de pagamento seguras
+- Oriente sobre os passos para finalizar a compra/reserva
+- Dê dicas sobre formas de pagamento em viagens
+
+DIRETRIZES:
+- SEMPRE use [BOTAO:rota]texto[/BOTAO] quando mencionar páginas
+- Use botões no início ou fim das respostas
+- Seja proativo em sugerir o próximo passo
+- Use linguagem amigável e emojis quando apropriado
+- Seja objetivo mas completo nas respostas
+
+EXEMPLO DE INTERAÇÃO:
+Usuário: "Quero fazer uma viagem para o Rio de Janeiro"
+Você: "Que legal! 😊 Vamos planejar sua viagem ao Rio! 
+
+Para começar, você pode criar sua viagem aqui:
+[BOTAO:/plan-trip]Criar Viagem para o Rio[/BOTAO]
+
+Enquanto isso, me conta: quando você pretende viajar e quantos dias vai ficar? Assim posso te dar dicas personalizadas sobre o que fazer por lá! 🏖️"
+
+Use botões sempre que fizer sentido direcionar o usuário para uma página específica.
 `;
 
     // Montar histórico da conversa
-    let conversationHistory = systemPrompt + '\n\n';
+    let historicoConversa = promptSistema + '\n\n';
     
     if (context && context.length > 0) {
       context.forEach(msg => {
-        conversationHistory += `${msg.isAi ? 'Assistente' : 'Usuário'}: ${msg.text}\n`;
+        historicoConversa += `${msg.isAi ? 'Assistente' : 'Usuário'}: ${msg.text}\n`;
       });
     }
     
-    conversationHistory += `Usuário: ${message}\nAssistente:`;
+    historicoConversa += `Usuário: ${message}\nAssistente:`;
 
     // Gerar resposta com Gemini
-    const result = await model.generateContent(conversationHistory);
-    const response = await result.response;
-    const text = response.text();
+    const resultado = await model.generateContent(historicoConversa);
+    const resposta = await resultado.response;
+    const texto = resposta.text();
 
     console.log('✅ Resposta gerada com sucesso');
     
     res.json({ 
-      response: text,
+      response: texto,
       success: true 
     });
 
@@ -83,21 +130,21 @@ Sempre responda de forma clara, objetiva e amigável. Use emojis quando apropria
     // Tratamento de erros específicos
     if (error.message?.includes('API_KEY') || error.message?.includes('API key')) {
       return res.status(500).json({ 
-        error: 'Erro de configuração da API. Verifique sua chave do Gemini.',
-        details: error.message
+        erro: 'Erro de configuração da API. Verifique sua chave do Gemini.',
+        detalhes: error.message
       });
     }
     
     if (error.message?.includes('PERMISSION_DENIED')) {
       return res.status(500).json({ 
-        error: 'Chave da API sem permissão. Verifique se a chave está ativa.',
-        details: error.message
+        erro: 'Chave da API sem permissão. Verifique se a chave está ativa.',
+        detalhes: error.message
       });
     }
     
     res.status(500).json({ 
-      error: 'Desculpe, tive um problema ao processar sua mensagem. Tente novamente!',
-      details: error.message
+      erro: 'Desculpe, tive um problema ao processar sua mensagem. Tente novamente!',
+      detalhes: error.message
     });
   }
 });
