@@ -3,20 +3,22 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./login.css"
+import { registerClient, loginClient } from "../../api/client"
 
 export default function Login({ onLogin }) {
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
+  const [nome, setNome] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
 
-    if (!email || !password) {
+    if (!email || !password || (isSignUp && !nome)) {
       setError("Por favor, preencha todos os campos")
       return
     }
@@ -32,43 +34,44 @@ export default function Login({ onLogin }) {
       }
     }
 
-    
-    const users = JSON.parse(localStorage.getItem("users")) || []
-
-    if (isSignUp) {
-     
-      if (users.some((u) => u.email === email)) {
-        setError("Este email já está cadastrado")
-        return
+    try {
+      if (isSignUp) {
+        const result = await registerClient({ nome, email, password })
+        // Após cadastro, efetua login automaticamente
+        const logged = await loginClient({ email, password })
+        onLogin({ id: logged.id, nome: logged.nome, email: logged.email })
+      } else {
+        const logged = await loginClient({ email, password })
+        onLogin({ id: logged.id, nome: logged.nome, email: logged.email })
       }
-     
-      const newUser = { id: Date.now(), email, password, trips: [] }
-      users.push(newUser)
-      localStorage.setItem("users", JSON.stringify(users))
-    } else {
-     
-      const user = users.find((u) => u.email === email && u.password === password)
-      if (!user) {
-        setError("Email ou senha incorretos")
-        return
-      }
+      navigate("/home")
+    } catch (err) {
+      setError(err.message || "Ocorreu um erro. Tente novamente.")
     }
-
-  
-    const user = users.find((u) => u.email === email)
-    onLogin(user)
-    navigate("/home")
   }
 
   return (
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h1>✈️ Planejador+</h1>
+          <h1>✈️ Viagem+</h1>
           <p>{isSignUp ? "Crie sua conta" : "Bem-vindo de volta"}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
+          {isSignUp && (
+            <div className="form-group">
+              <label htmlFor="nome">Nome</label>
+              <input
+                id="nome"
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Seu nome completo"
+              />
+            </div>
+          )}
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -76,7 +79,7 @@ export default function Login({ onLogin }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
+              placeholder="Endereço de email"
             />
           </div>
 

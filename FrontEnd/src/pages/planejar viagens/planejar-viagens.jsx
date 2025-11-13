@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import "./planejar-viagens.css"
 
@@ -13,6 +13,35 @@ export default function PlanTrip({ user, onLogout }) {
   const [description, setDescription] = useState("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+
+  // novo: ref e estado do menu de usuário
+  const menuRef = useRef(null)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev)
+  }
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    function handleEsc(e) {
+      if (e.key === "Escape") setIsMenuOpen(false)
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("touchstart", handleClickOutside)
+    document.addEventListener("keydown", handleEsc)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
+      document.removeEventListener("keydown", handleEsc)
+    }
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -30,7 +59,6 @@ export default function PlanTrip({ user, onLogout }) {
       return
     }
 
-    
     const newTrip = {
       id: Date.now(),
       name: tripName,
@@ -43,25 +71,16 @@ export default function PlanTrip({ user, onLogout }) {
       createdAt: new Date().toISOString(),
     }
 
-    
-    const users = JSON.parse(localStorage.getItem("users")) || []
-    const userIndex = users.findIndex((u) => u.id === user.id)
-
-    if (userIndex !== -1) {
-      if (!users[userIndex].trips) {
-        users[userIndex].trips = []
-      }
-      users[userIndex].trips.push(newTrip)
-      localStorage.setItem("users", JSON.stringify(users))
-
-      
-      localStorage.setItem("currentUser", JSON.stringify(users[userIndex]))
-    }
-
-    setSuccess("Viagem criada com sucesso!")
-    setTimeout(() => {
-      navigate("/my-trips")
-    }, 1500)
+    // Persistência local por usuário
+    import("../../api/tripsLocal").then(({ addTrip }) => {
+      addTrip(user.id, newTrip)
+      setSuccess("Viagem criada com sucesso!")
+      setTimeout(() => {
+        navigate("/my-trips")
+      }, 1200)
+    }).catch(() => {
+      setError("Falha ao salvar viagem localmente")
+    })
   }
 
   const handleLogout = () => {
@@ -73,7 +92,7 @@ export default function PlanTrip({ user, onLogout }) {
     <div className="plan-trip-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1 className="navbar-title">✈️ Viagem+</h1>
+          <h1 className="navbar-title">Viagem+</h1>
           <div className="nav-actions">
             <button className="nav-btn" onClick={() => navigate("/home")}>
               Home
@@ -81,9 +100,34 @@ export default function PlanTrip({ user, onLogout }) {
             <button className="nav-btn" onClick={() => navigate("/my-trips")}>
               Minhas Viagens
             </button>
-            <button className="logout-btn" onClick={handleLogout}>
-              Sair
-            </button>
+            <div className="user-menu" ref={menuRef}>
+              <button
+                className={`user-btn ${isMenuOpen ? "open" : ""}`}
+                onClick={toggleMenu}
+                aria-haspopup="true"
+                aria-expanded={isMenuOpen}
+                title="Abrir menu do usuário"
+              >
+                <span role="img" aria-label="user">👤</span>
+              </button>
+
+              {isMenuOpen && (
+                <div className="menu-popup" role="menu">
+                  <button
+                    className="menu-item"
+                    onClick={() => {
+                      setIsMenuOpen(false)
+                      navigate("/user-profile")
+                    }}
+                  >
+                    Ver Perfil
+                  </button>
+                  <button className="menu-item logout" onClick={handleLogout}>
+                    Sair
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </nav>

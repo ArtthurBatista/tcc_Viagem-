@@ -6,11 +6,9 @@
 
 .perfil-main {
   max-width: 1200px;
-  margin: 30px auto;
-  display: flex;
-  gap: 40px;
-  padding: 30px 20px;
-  position: relative; 
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
   min-height: calc(100vh - 200px);
 }
 
@@ -128,6 +126,12 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
+.perfil-content-wrapper {
+  display: flex;
+  gap: 40px;
+  padding: 0 20px;
+}
+
 .perfil-header h1 {
   font-size: 32px;
   margin-bottom: 20px;
@@ -236,20 +240,21 @@
 }
 
 .back-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  margin: 20px 0;
+  padding: 8px 16px;
   background: none;
   border: none;
-  color: #666;
-  font-weight: 600;
+  color: var(--dark-color);
+  font-size: 16px;
   cursor: pointer;
-  transition: color 0.2s;
-  padding: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s ease;
 }
 
 .back-btn:hover {
-  color: #3b82f6;
+  transform: translateX(-5px);
 }
 
 .logout-link {

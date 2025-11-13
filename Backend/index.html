@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Meu Site</title>
+</head>
+<body>
+  <h1>Página de Cadastro</h1>
+  <button id="cadastrar">Cadastrar Client</button>
+  <button id="login">Fazer Login</button>
+  <script>
+    // Exemplo: Cadastrar um client (chama POST /clients/register)
+    document.getElementById('cadastrar').addEventListener('click', async () => {
+      const data = {
+        username: 'novoUsuario',
+        email: 'email@example.com',
+        password: 'senhaSegura'
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/clients/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        console.log(result);  // Exibe o resultado no console
+        alert(result.message);  // Mostra uma mensagem no site
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Falha ao cadastrar');
+      }
+    });
+
+    // Exemplo: Fazer login (chama POST /clients/login)
+    document.getElementById('login').addEventListener('click', async () => {
+      const data = {
+        username: 'novoUsuario',
+        password: 'senhaSegura'
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/clients/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        console.log(result);
+        alert(result.message);
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Falha no login');
+      }
+    });
+  </script>
+</body>
+</html>
