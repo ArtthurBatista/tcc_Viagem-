@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -11,9 +12,17 @@ BigInt.prototype.toJSON = function() { return this.toString() };
 app.use(cors());
 app.use(express.json());
 
-// Suas rotas existentes
+// Servir arquivos estáticos (imagens)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Rotas
 const clientsRoutes = require('./routes/clients');
+const viagensRoutes = require('./routes/viagens');
+const imagesRoutes = require('./routes/images');
+
 app.use('/clients', clientsRoutes);
+app.use('/viagens', viagensRoutes);
+app.use('/images', imagesRoutes);
 
 // Rota raiz
 app.get('/', (req, res) => {
@@ -45,6 +54,7 @@ app.get('/test-connection', async (req, res) => {
 app.listen(port, () => {
   console.log(`🚀 Server funcionando em http://localhost:${port}`);
   console.log(`📍 API de clientes em http://localhost:${port}/clients`);
+  console.log(`🗺️  API de viagens em http://localhost:${port}/viagens`);
   console.log(`🧪 Teste de conexão em http://localhost:${port}/test-connection`);
 });
 

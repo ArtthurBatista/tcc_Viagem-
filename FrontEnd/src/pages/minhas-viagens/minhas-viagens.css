@@ -120,12 +120,12 @@
 }
 
 .empty-state {
-  background: white;
-  padding: 80px 40px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  background: linear-gradient(135deg, #e8f4f8 0%, #f8f9fa 100%);
+  border-radius: 22px;
+  box-shadow: 0 4px 18px rgba(60, 80, 120, 0.08);
+  padding: 48px 32px;
   text-align: center;
-  animation: slideUp 0.8s ease;
+  animation: fadeInTrip 0.8s cubic-bezier(.4,2,.3,.8);
 }
 
 @keyframes slideUp {
@@ -140,8 +140,8 @@
 }
 
 .empty-icon {
-  font-size: 80px;
-  margin-bottom: 20px;
+  font-size: 48px;
+  margin-bottom: 18px;
 }
 
 .empty-state h3 {
@@ -157,89 +157,93 @@
 }
 
 .empty-btn {
-  background: linear-gradient(135deg, rgba(78,193,255,1) 0%, var(--primary-color, #0b6ff0) 100%);
-  color: white;
-  padding: 12px 30px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #69b2fb 0%, #007af5 100%);
+  color: #fff;
   font-weight: 600;
   border: none;
+  border-radius: 12px;
+  padding: 10px 22px;
+  font-size: 16px;
+  box-shadow: 0 2px 12px rgba(105, 157, 254, 0.10);
   cursor: pointer;
-  transition: var(--transition);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .empty-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(11, 111, 240, 0.18);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(105, 157, 254, 0.18);
 }
 
 .trips-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 25px;
-  animation: slideUp 0.8s ease;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-top: 32px;
 }
 
 .trip-card {
-  background: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 6px 32px rgba(60, 80, 120, 0.10);
+  padding: 0 0 24px 0;
+  transition: transform 0.25s cubic-bezier(.4,2,.3,.8), box-shadow 0.25s;
+  position: relative;
   overflow: hidden;
-  transition: var(--transition);
-  animation: scaleIn 0.5s ease;
+  animation: fadeInTrip 0.8s cubic-bezier(.4,2,.3,.8);
 }
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+@keyframes fadeInTrip {
+  0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .trip-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(11, 78, 173, 0.12);
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(60, 80, 120, 0.18);
 }
 
 .trip-header-card {
-  background: linear-gradient(135deg, var(--primary-color, #3b82f6) 0%, var(--secondary-color, #0b6ff0) 100%);
-  color: white;
-  padding: 25px;
+  padding: 18px 24px 0 24px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
 }
 
 .trip-header-card h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
-  margin: 0;
-  flex: 1;
+  color: #313131;
+  margin-bottom: 6px;
 }
 
 .destination-badge {
-  background: rgba(255, 255, 255, 0.18);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  display: inline-block;
+  background: linear-gradient(135deg, #69b2fb 0%, #007af5 100%);
+  color: #fff;
+  font-size: 13px;
   font-weight: 600;
-  white-space: nowrap;
+  padding: 5px 14px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(105, 157, 254, 0.10);
+  letter-spacing: 0.5px;
+  transition: background 0.3s;
 }
 
 .trip-info {
-  padding: 20px 25px;
-  border-bottom: 1px solid rgba(13, 27, 53, 0.06);
+  padding: 0 24px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .info-item {
+  font-size: 15px;
+  color: #5a5a5a;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 14px;
+  align-items: center;
+  gap: 8px;
 }
 
 .info-item:last-child {

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { searchImage } from "../../api/images"
 import "./planejar-viagens.css"
 
 export default function PlanTrip({ user, onLogout }) {
@@ -43,7 +44,7 @@ export default function PlanTrip({ user, onLogout }) {
     }
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
     setSuccess("")
@@ -59,6 +60,14 @@ export default function PlanTrip({ user, onLogout }) {
       return
     }
 
+    // Buscar imagem para o destino antes de salvar
+    let tripImage = null;
+    try {
+      tripImage = await searchImage(destination);
+    } catch (error) {
+      console.error('Erro ao buscar imagem:', error);
+    }
+
     const newTrip = {
       id: Date.now(),
       name: tripName,
@@ -66,6 +75,7 @@ export default function PlanTrip({ user, onLogout }) {
       startDate,
       endDate,
       description,
+      image: tripImage || null,
       expenses: [],
       packingList: [],
       createdAt: new Date().toISOString(),

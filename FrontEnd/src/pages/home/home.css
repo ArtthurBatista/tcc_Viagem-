@@ -312,9 +312,8 @@
 
 /* Estilos para a seção de Recursos */
 .features-section-custom {
-    padding: 60px 0;
-    margin-bottom: 40px;
-    text-align: center;
+    margin: 60px 0 40px 0;
+    padding: 0 10px;
 }
 
 .features-section-custom .section-header {
@@ -335,72 +334,70 @@
 
 .features-grid-custom {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
-    padding: 0 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: 32px;
 }
 
 .feature-card-custom {
-    background: white;
-    padding: 30px 20px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-    text-align: left;
-    transition: var(--transition);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 6px 32px rgba(60, 80, 120, 0.10);
+    padding: 32px 24px 28px 24px;
+    text-align: center;
+    transition: transform 0.25s cubic-bezier(.4,2,.3,.8), box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
 }
 
 .feature-card-custom:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 40px rgba(60, 80, 120, 0.18);
 }
 
 .feature-icon-wrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 18px auto;
+    border-radius: 50%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    color: white;
+    justify-content: center;
+    background: linear-gradient(135deg, #69b2fb 0%, #007af5 100%);
+    box-shadow: 0 2px 12px rgba(105, 157, 254, 0.15);
+    font-size: 32px;
+    color: #fff;
+    transition: background 0.3s;
+    animation: popIcon 1.2s cubic-bezier(.4,2,.3,.8);
 }
 
-.icon-orange {
-    background-color: #f77d33;
-    color: white;
-}
-.icon-blue {
-    background-color: #316be0;
-    color: white;
-}
-.icon-yellow {
-    background-color: #ffb838;
-    color: white;
-}
-.icon-royal-blue {
-    background-color: #3b74e8;
-    color: white;
-    font-size: 20px;
+@keyframes popIcon {
+    0% {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-.feature-title-custom {
-    font-size: 18px;
-    color: var(--dark-color);
+.feature-card-custom h3 {
+    font-size: 22px;
     font-weight: 700;
+    color: #313131;
     margin-bottom: 10px;
 }
 
-.feature-description-custom {
-    color: #6c757d;
-    font-size: 14px;
+.feature-card-custom p {
+    color: #5a5a5a;
+    font-size: 15px;
     line-height: 1.6;
+    margin-bottom: 0;
 }
-
 
 /* Estilos para a seção Como Funciona */
 .how-it-works-section {

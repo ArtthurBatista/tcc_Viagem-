@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import Login from "./pages/login/login"
+import RecuperarSenha from "./pages/recuperar-senha/recuperar-senha"
 import Home from "./pages/home/home"
 import PlanTrip from "./pages/planejar viagens/planejar-viagens"
 import MyTrips from "./pages/minhas-viagens/minhas-viagens"
@@ -39,6 +40,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={isLoggedIn ? <Navigate to="/home" /> : <Login onLogin={handleLogin} />} />
+        <Route path="/recuperar-senha" element={<RecuperarSenha />} />
         <Route
           path="/home"
           element={isLoggedIn ? <Home user={user} onLogout={handleLogout} /> : <Navigate to="/login" />}

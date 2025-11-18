@@ -141,6 +141,25 @@ export default function MyTrips({ user, onLogout }) {
                 <div key={trip.id} className="trip-card">
                   {/* Bloco de edição removido - apenas a visualização permanece */}
                   <>
+                    {trip.image && (
+                      <div style={{ 
+                        width: '100%', 
+                        height: '200px', 
+                        overflow: 'hidden',
+                        borderRadius: '8px 8px 0 0',
+                        marginBottom: '15px'
+                      }}>
+                        <img 
+                          src={trip.image} 
+                          alt={trip.destination}
+                          style={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            objectFit: 'cover' 
+                          }}
+                        />
+                      </div>
+                    )}
                     <div className="trip-header-card">
                       <h3>{trip.name}</h3>
                       <span className="destination-badge">{trip.destination}</span>
