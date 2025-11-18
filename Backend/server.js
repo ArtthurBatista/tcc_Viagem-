@@ -24,13 +24,15 @@ app.get('/', (req, res) => {
 app.get('/test-connection', async (req, res) => {
   try {
     const pool = require('./db');
+    const dbMode = pool.getDbMode ? pool.getDbMode() : 'unknown';
     const conn = await pool.getConnection();
     const result = await conn.query('SELECT 1 as test');
     conn.release();
     res.json({ 
       message: '✅ Conexão com banco de dados OK', 
+      mode: dbMode === 'mariadb' ? 'MariaDB' : 'Memória (Fallback)',
       result,
-      database: process.env.DB_NAME
+      database: process.env.DB_NAME || 'em memória'
     });
   } catch (error) {
     res.status(500).json({ 
