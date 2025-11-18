@@ -1,0 +1,85 @@
+{
+  "clients": [
+    {
+      "id": 1,
+      "nome": "Teste Memoria",
+      "email": "teste@memoria.com",
+      "password": "$2b$10$A8JnRXb5fKvqn1gnRXJKAebdtEbM3skNK/k8u/WcBElmx0Iv8kuFy",
+      "foto_perfil": "/uploads/perfil/perfil-1763476071618-73403434.jpg"
+    },
+    {
+      "id": 1,
+      "nome": "enzo",
+      "email": "enzo@gmail.com",
+      "password": "$2b$10$ro0Zv/exWTw5fCklpGJAC.rIjsQ6NVflNpG8C16UxoBu7mXKPlW0W",
+      "foto_perfil": null
+    },
+    {
+      "id": 2,
+      "nome": "batista",
+      "email": "batista@gmail.com",
+      "password": "$2b$10$E3gs5pCQuVCpY.3B9JZrTuwHh8LWl5pFklu4IcjO0Xvbwp54qeOhq",
+      "foto_perfil": null
+    }
+  ],
+  "viagens": [
+    {
+      "id": 1,
+      "cliente_id": 1,
+      "destino": "Tokyo",
+      "origem": "Rio de Janeiro",
+      "data_inicio": "2025-08-01",
+      "data_fim": "2025-08-15",
+      "orcamento": 8000,
+      "gasto_total": 0,
+      "descricao": "Viagem para conhecer o Japão",
+      "imagem_url": null,
+      "status": "planejada",
+      "data_criacao": "2025-11-18T13:44:34.534Z"
+    },
+    {
+      "id": 2,
+      "cliente_id": 1,
+      "destino": "Tokyo",
+      "origem": "Rio de Janeiro",
+      "data_inicio": "2025-08-01",
+      "data_fim": "2025-08-15",
+      "orcamento": 8000,
+      "gasto_total": 0,
+      "descricao": "Viagem para conhecer o Japão",
+      "imagem_url": null,
+      "status": "planejada",
+      "data_criacao": "2025-11-18T13:45:59.070Z"
+    },
+    {
+      "id": 3,
+      "cliente_id": 1,
+      "destino": "Tokyo",
+      "origem": "Rio de Janeiro",
+      "data_inicio": "2025-08-01",
+      "data_fim": "2025-08-15",
+      "orcamento": 8000,
+      "gasto_total": 0,
+      "descricao": "Viagem para conhecer o Japão",
+      "imagem_url": null,
+      "status": "planejada",
+      "data_criacao": "2025-11-18T13:47:48.744Z"
+    },
+    {
+      "id": 4,
+      "cliente_id": 1,
+      "destino": "Tokyo",
+      "origem": "Rio de Janeiro",
+      "data_inicio": "2025-08-01",
+      "data_fim": "2025-08-15",
+      "orcamento": 8000,
+      "gasto_total": 0,
+      "descricao": "Viagem para conhecer o Japão",
+      "imagem_url": null,
+      "status": "planejada",
+      "data_criacao": "2025-11-18T13:55:22.290Z"
+    }
+  ],
+  "nextClientId": 3,
+  "nextViagemId": 5
+}
