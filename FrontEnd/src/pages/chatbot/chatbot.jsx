@@ -98,7 +98,7 @@ const Chatbot = ({ aoFechar }) => {
         setCarregando(true);
 
         try {
-            const resposta = await fetch('/api/chat', {
+            const resposta = await fetch('http://localhost:3001/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -130,7 +130,7 @@ const Chatbot = ({ aoFechar }) => {
                 <div className="popup-chat">
                     <div className="cabecalho-chat">
                         <div className="info-cabecalho">
-                            <img src="/public/Chatbot.ico" alt="Viajante+" className="icone-chat" />
+                            <img src="/Chatbot.ico" alt="Viajante+" className="icone-chat" />
                             <h2 className="texto-logo">Viajante+</h2>
                             <button className='botao-fechar' onClick={aoFechar}>
                                 <span className="seta-baixo"></span>
@@ -142,7 +142,7 @@ const Chatbot = ({ aoFechar }) => {
                         <div key={idx} className={`mensagem ${msg.ehIA ? 'ia' : 'usuario'}`}>
                             {msg.ehIA && (
                                 <div className="avatar-ia">
-                                    <img src="/public/Chatbot.ico" alt="Viajante+" />
+                                    <img src="/Chatbot.ico" alt="Viajante+" />
                                 </div>
                             )}
                             <div className="conteudo-mensagem">
@@ -153,7 +153,7 @@ const Chatbot = ({ aoFechar }) => {
                     {carregando && (
                         <div className="mensagem ia">
                             <div className="avatar-ia">
-                                <img src="/public/Chatbot.ico" alt="Viajante+" />
+                                <img src="/Chatbot.ico" alt="Viajante+" />
                             </div>
                             <div className="conteudo-mensagem digitando">
                                 <div className="indicador-digitacao">

@@ -1,3 +1,29 @@
-node_modules
+# Dependências
+node_modules/
+package-lock.json
+
+# Variáveis de ambiente
 .env
+.env.local
+.env.production
+
+# Sistema
 .DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Backups (não versionar)
+*-backup.js
+*-antigo*.js
+server-antigo-backup.js
+
+# Documentação temporária
+REORGANIZACAO.md

@@ -1,5 +1,30 @@
 # Backend Viagem+ com Gemini AI
 
+## 📁 Estrutura do Projeto
+
+```
+BackEnd/
+├── src/
+│   ├── config/              # Configurações
+│   │   ├── gemini.js        # Cliente Gemini AI
+│   │   └── prompts.js       # Prompts do sistema
+│   │
+│   ├── services/            # Lógica de negócio
+│   │   └── chatbotService.js  # Serviço do chatbot
+│   │
+│   ├── routes/              # Rotas da API
+│   │   └── chatbot.js       # Endpoints do chatbot
+│   │
+│   ├── utils/               # Utilitários e testes
+│   │
+│   └── README.md            # Documentação detalhada
+│
+├── server.js                # Servidor principal
+├── .env                     # Variáveis de ambiente
+├── package.json             # Dependências
+└── README.md                # Este arquivo
+```
+
 ## 🚀 Como configurar e usar
 
 ### 1. Instalar dependências
