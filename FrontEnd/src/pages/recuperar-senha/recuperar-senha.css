@@ -1,5 +1,43 @@
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color, #0f172a);
+  letter-spacing: 0.5px;
+}
+
+.nav-btn {
+  background: #f3f4f6;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .recuperar-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,6 +66,7 @@
 @keyframes cardFadeIn {
   0% { opacity: 0; transform: scale(0.95) translateY(30px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
+}
 
 .recuperar-card::before {
   content: "";
@@ -73,7 +112,6 @@
 .form-group input:focus {
   border: 1.5px solid #007af5;
   box-shadow: 0 2px 16px rgba(105, 157, 254, 0.13);
-}
 }
 
 .recuperar-btn {

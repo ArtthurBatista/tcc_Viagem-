@@ -108,7 +108,7 @@ USE_MEMORY_DB=false
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=1234
-DB_NAME=tcc_viagem
+DB_NAME=clients_orders_system
 DB_PORT=3306
 
 PORT=3001

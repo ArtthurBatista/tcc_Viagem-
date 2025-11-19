@@ -126,6 +126,13 @@ export default function TripDetails({ user, onLogout }) {
     navigate("/login")
   }
 
+  const capitalize = (str) => {
+    if (!str) return ''
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  }
+
+  const userName = capitalize(user?.email?.split('@')[0]) || 'Usuário'
+
   if (!trip) {
     return (
       <div className="loading-container">
@@ -157,7 +164,7 @@ export default function TripDetails({ user, onLogout }) {
                 aria-expanded={isMenuOpen}
                 title="Abrir menu do usuário"
               >
-                <span role="img" aria-label="user">👤</span>
+                <span role="img" aria-label="user">👤</span> {userName}
               </button>
 
               {isMenuOpen && (

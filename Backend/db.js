@@ -213,7 +213,7 @@ if (!USE_MEMORY_DB) {
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '1234',
-    database: process.env.DB_NAME || 'tcc_viagem',
+    database: process.env.DB_NAME || 'clients_orders_system',
     port: process.env.DB_PORT || 3306,
     connectionLimit: 10,
     waitForConnections: true,
@@ -228,7 +228,7 @@ if (!USE_MEMORY_DB) {
     .then(conn => {
       console.log('✅ Conectado ao MariaDB com sucesso!');
       console.log(`   Host: ${process.env.DB_HOST || 'localhost'}`);
-      console.log(`   Database: ${process.env.DB_NAME || 'tcc_viagem'}`);
+      console.log(`   Database: ${process.env.DB_NAME || 'clients_orders_system'}`);
       dbMode = 'mariadb';
       conn.release();
     })
@@ -243,5 +243,5 @@ if (!USE_MEMORY_DB) {
   dbMode = 'memory';
 }
 
-// Exporta sempre o banco em memória (arquivos temporários)
-module.exports = memoryDB;
+// Exporta MariaDB se disponível, senão usa memória
+module.exports = pool || memoryDB;

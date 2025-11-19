@@ -4,6 +4,49 @@
   padding: 0;
 }
 
+.navbar {
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 18px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.navbar-content {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.navbar-title {
+  font-size: 28px;
+  color: var(--primary-color, #0f172a);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s ease;
+  justify-self: start;
+  cursor: default;
+}
+
+.navbar-title:hover {
+  transform: scale(1.05);
+}
+
 .perfil-main {
   max-width: 1200px;
   margin: 0 auto;
@@ -296,14 +339,22 @@
 }
 
 .nav-logout {
-  color: #666;
+  color: #111827;
   cursor: pointer;
-  font-size: 14px;
-  transition: color 0.2s ease;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 10px 16px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .nav-logout:hover {
-  color: #ff5252;
+  background: #e5e7eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 768px) {

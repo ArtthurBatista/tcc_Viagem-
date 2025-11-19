@@ -1,12 +1,12 @@
 -- ================================
 -- Script SQL para criar as tabelas
--- Banco: tcc_viagem
+-- Banco: clients_orders_system
 -- ================================
 
 -- Criar banco de dados
-CREATE DATABASE IF NOT EXISTS tcc_viagem CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS clients_orders_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE tcc_viagem;
+USE clients_orders_system;
 
 -- ================================
 -- TABELA: CLIENTES
@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS clientes (
   nome VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
+  foto_perfil VARCHAR(255),
   telefone VARCHAR(20),
   endereco VARCHAR(255),
   data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

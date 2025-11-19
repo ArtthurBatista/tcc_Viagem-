@@ -78,11 +78,14 @@ const popularDestinations = [
 
 function PopularDestinationsSection() {
   const [destinationImages, setDestinationImages] = useState({});
+  const [imagesLoaded, setImagesLoaded] = useState({});
+  const listRef = useRef(null)
 
   useEffect(() => {
     // Carregar imagens para todos os destinos
     const loadImages = async () => {
       const images = {};
+      const loaded = {};
       for (const dest of popularDestinations) {
         try {
           const imageUrl = await searchImage(dest.searchTerm);
@@ -91,13 +94,23 @@ function PopularDestinationsSection() {
           }
         } catch (error) {
           console.error(`Erro ao carregar imagem para ${dest.name}:`, error);
+        } finally {
+          loaded[dest.id] = true;
         }
       }
       setDestinationImages(images);
+      setImagesLoaded(loaded);
     };
 
     loadImages();
   }, []);
+
+  const scrollByAmount = (dir) => {
+    const el = listRef.current
+    if (!el) return
+    const amount = Math.round(el.clientWidth * 0.9) * (dir === 'next' ? 1 : -1)
+    el.scrollBy({ left: amount, behavior: 'smooth' })
+  }
 
   return (
     <section className="destinations-section">
@@ -105,7 +118,9 @@ function PopularDestinationsSection() {
         <h3 className="section-title">Destinos Populares</h3>
         <p className="section-subtitle">Explore os lugares mais incríveis do mundo</p>
       </div>
-      <div className="destinations-grid">
+      <button type="button" className="carousel-nav prev" onClick={() => scrollByAmount('prev')} aria-label="Anterior">‹</button>
+      <button type="button" className="carousel-nav next" onClick={() => scrollByAmount('next')} aria-label="Próximo">›</button>
+      <div className="destinations-carousel" ref={listRef}>
         {popularDestinations.map((destination) => (
           <div key={destination.id} className="destination-card">
             <div className="destination-image-wrapper">
@@ -120,7 +135,7 @@ function PopularDestinationsSection() {
                 }} 
                 title={destination.name}
               >
-                {!destinationImages[destination.id] && (
+                {!imagesLoaded[destination.id] && (
                   <div style={{ 
                     display: 'flex', 
                     alignItems: 'center', 
@@ -209,11 +224,20 @@ export default function Home({ user, onLogout }) {
     <div className="home-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1 className="navbar-title"> Viagem+</h1>
+          <h1 className="navbar-title">✈️ Viagem+</h1>
+
+          <div className="nav-links">
+            <button className="nav-link-btn" onClick={() => navigate("/my-trips")}>
+              ✈️ Minhas Viagens
+            </button>
+            <button className="nav-link-btn" onClick={() => navigate("/plan-trip")}>
+              📝 Agendar Viagem
+            </button>
+          </div>
 
           <div className="user-menu" ref={menuRef}>
             <button className="user-btn" onClick={toggleMenu}>
-              <span role="img" aria-label="user">👤</span>
+              <span role="img" aria-label="user">👤</span> {userName}
             </button>
 
             {isMenuOpen && (
@@ -225,10 +249,10 @@ export default function Home({ user, onLogout }) {
                     navigate("/user-profile")
                   }}
                 >
-                  Ver Perfil
+                  👤 Ver Perfil
                 </button>
                 <button className="menu-item logout" onClick={handleLogout}>
-                  Sair
+                  🚪 Sair
                 </button>
               </div>
             )}

@@ -33,7 +33,14 @@ export default function RecuperarSenha() {
   }
 
   return (
-    <div className="recuperar-container">
+    <>
+      <nav className="navbar">
+        <div className="logo">✈️ Viagem+</div>
+        <button className="nav-btn" onClick={() => navigate("/login")}>
+          Voltar ao Login
+        </button>
+      </nav>
+      <div className="recuperar-container">
       <div className="recuperar-card">
         <h2>Recuperar Senha</h2>
         <form onSubmit={handleSubmit} className="recuperar-form">
@@ -71,8 +78,8 @@ export default function RecuperarSenha() {
           {success && <div className="success-message">{success}</div>}
           <button type="submit" className="recuperar-btn">Recuperar Senha</button>
         </form>
-        <button className="voltar-btn" onClick={() => navigate("/login")}>Voltar ao Login</button>
       </div>
     </div>
+    </>
   )
 }

@@ -60,7 +60,12 @@ export default function Perfil({ user, onLogout }) {
       })
 
       if (!response.ok) {
-        throw new Error('Erro ao fazer upload da foto')
+        let message = 'Erro ao fazer upload da foto'
+        try {
+          const err = await response.json()
+          if (err?.error) message = err.error
+        } catch {}
+        throw new Error(message)
       }
 
       const data = await response.json()
@@ -68,7 +73,7 @@ export default function Perfil({ user, onLogout }) {
       alert('Foto de perfil atualizada com sucesso!')
     } catch (error) {
       console.error('Erro:', error)
-      alert('Erro ao fazer upload da foto. Tente novamente.')
+      alert(error?.message || 'Erro ao fazer upload da foto. Tente novamente.')
     } finally {
       setUploading(false)
     }
@@ -120,7 +125,7 @@ export default function Perfil({ user, onLogout }) {
             <div className="perfil-avatar" onClick={() => !uploading && document.getElementById('photo-input').click()}>
               {profile.foto_perfil ? (
                 <img 
-                  src={`http://localhost:3001${profile.foto_perfil}`} 
+                  src={profile.foto_perfil} 
                   alt="Foto de perfil" 
                   style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                 />

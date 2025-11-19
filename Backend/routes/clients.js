@@ -25,16 +25,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // Limite de 10MB
   fileFilter: (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const allowedTypes = /jpeg|jpg|png|gif|webp|heic|heif|avif/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
+    const mimetype = allowedTypes.test((file.mimetype || '').toLowerCase());
     
     if (mimetype && extname) {
       return cb(null, true);
     } else {
-      cb(new Error('Apenas imagens são permitidas (jpeg, jpg, png, gif, webp)'));
+      cb(new Error('Apenas imagens são permitidas (jpeg, jpg, png, gif, webp, heic, heif, avif)'));
     }
   }
 });
@@ -69,7 +69,7 @@ router.post('/register', async (req, res) => {
   console.log('📥 Dados recebidos:', req.body);
   const { usuario, email, password } = req.body;
   
-  if (!nome || !email || !password) {
+  if (!usuario || !email || !password) {
     console.log('❌ Campos faltando:', { usuario, email, password: password ? '***' : undefined });
     return res.status(400).json({ message: 'Todos os campos são obrigatórios' });
   }
@@ -209,7 +209,22 @@ router.delete('/:id', async (req, res) => {
 });
 
 // 7. PUT /clientes/:id/foto - Upload de foto de perfil
-router.put('/:id/foto', upload.single('foto'), async (req, res) => {
+// Tratamento explícito de erros do Multer (tipo/limite)
+router.put('/:id/foto', (req, res, next) => {
+  upload.single('foto')(req, res, function (err) {
+    if (err) {
+      if (err.message && err.message.includes('Apenas imagens')) {
+        return res.status(400).json({ error: err.message });
+      }
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).json({ error: 'Arquivo muito grande. Máximo 10MB.' });
+      }
+      console.error('Erro no upload da foto:', err);
+      return res.status(400).json({ error: 'Falha no upload da foto.' });
+    }
+    next();
+  });
+}, async (req, res) => {
   const { id } = req.params;
   
   if (!req.file) {
@@ -226,9 +241,10 @@ router.put('/:id/foto', upload.single('foto'), async (req, res) => {
       return res.status(404).json({ message: 'Cliente não encontrado' });
     }
     
-    // Deletar foto antiga se existir
+    // Deletar foto antiga se existir (caminho relativo a Backend/)
     if (clienteAtual[0].foto_perfil) {
-      const oldPhotoPath = path.join(__dirname, '..', clienteAtual[0].foto_perfil);
+      const rel = clienteAtual[0].foto_perfil.replace(/^[/\\]+/, '');
+      const oldPhotoPath = path.join(__dirname, '..', rel);
       if (fs.existsSync(oldPhotoPath)) {
         fs.unlinkSync(oldPhotoPath);
       }

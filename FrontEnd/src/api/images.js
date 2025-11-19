@@ -1,5 +1,10 @@
 const BASE = "/api";
 
+function fallbackImage(query) {
+  const seed = encodeURIComponent(query || Math.random().toString(36).slice(2));
+  return `https://picsum.photos/seed/${seed}/800/600`;
+}
+
 // Buscar imagem automaticamente pelo nome do destino
 export async function searchImage(query) {
   try {
@@ -10,10 +15,12 @@ export async function searchImage(query) {
     }
     
     const data = await res.json();
-    return data.imageUrl;
+    // Garante retorno válido
+    return data?.imageUrl || fallbackImage(query);
   } catch (error) {
     console.error('Erro ao buscar imagem:', error);
-    return null;
+    // Fallback local/externo para sempre exibir algo
+    return fallbackImage(query);
   }
 }
 
@@ -27,9 +34,22 @@ export async function searchImageDetailed(query) {
     }
     
     const data = await res.json();
-    return data.images;
+    if (data?.images) return data.images;
+    const base = fallbackImage(query);
+    return {
+      small: base.replace('/800/600', '/400/300'),
+      medium: base,
+      large: base.replace('/800/600', '/1200/800'),
+      featured: base,
+    };
   } catch (error) {
     console.error('Erro ao buscar imagens:', error);
-    return null;
+    const base = fallbackImage(query);
+    return {
+      small: base.replace('/800/600', '/400/300'),
+      medium: base,
+      large: base.replace('/800/600', '/1200/800'),
+      featured: base,
+    };
   }
 }

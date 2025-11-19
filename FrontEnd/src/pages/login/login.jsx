@@ -36,7 +36,7 @@ export default function Login({ onLogin }) {
 
     try {
       if (isSignUp) {
-        const result = await registerClient({ nome: usuario, email, password })
+        const result = await registerClient({ usuario, email, password })
         // Após cadastro, efetua login automaticamente
         const logged = await loginClient({ email, password })
         onLogin({ id: logged.id, nome: logged.nome, email: logged.email })

@@ -8,7 +8,7 @@ async function testConnection() {
     // 1. Testar conexão
     const conn = await pool.getConnection();
     console.log('✅ Conexão estabelecida com sucesso!');
-    console.log(`   Database: ${process.env.DB_NAME || 'tcc_viagem'}`);
+    console.log(`   Database: ${process.env.DB_NAME || 'clients_orders_system'}`);
     console.log(`   Host: ${process.env.DB_HOST || 'localhost'}\n`);
     
     // 2. Verificar tabela clientes

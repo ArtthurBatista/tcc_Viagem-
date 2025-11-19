@@ -29,8 +29,8 @@ No HeidiSQL ou terminal MariaDB:
 -- Criar usuário que pode acessar de qualquer IP
 CREATE USER 'tcc_user'@'%' IDENTIFIED BY 'senha_forte_123';
 
--- Dar permissões no banco tcc_viagem
-GRANT ALL PRIVILEGES ON tcc_viagem.* TO 'tcc_user'@'%';
+-- Dar permissões no banco clients_orders_system
+GRANT ALL PRIVILEGES ON clients_orders_system.* TO 'tcc_user'@'%';
 
 -- Aplicar mudanças
 FLUSH PRIVILEGES;
@@ -78,7 +78,7 @@ Crie/edite `Backend/.env`:
 DB_HOST=192.168.1.100
 DB_USER=tcc_user
 DB_PASSWORD=senha_forte_123
-DB_NAME=tcc_viagem
+DB_NAME=clients_orders_system
 DB_PORT=3306
 
 # Importante: deixe false para usar MariaDB remoto
@@ -99,7 +99,7 @@ node server.js
 ```
 ✅ Conectado ao MariaDB com sucesso!
    Host: 192.168.1.100
-   Database: tcc_viagem
+   Database: clients_orders_system
 ```
 
 ---
@@ -139,7 +139,7 @@ No `.env`:
 DB_HOST=seu-banco.aws.com
 DB_USER=admin
 DB_PASSWORD=sua_senha
-DB_NAME=tcc_viagem
+DB_NAME=clients_orders_system
 DB_PORT=3306
 ```
 
@@ -220,7 +220,7 @@ http://localhost:3001/test-connection
 ### Servidor (192.168.1.100):
 ```sql
 CREATE USER 'tcc_user'@'%' IDENTIFIED BY 'Tcc@2024!';
-GRANT ALL PRIVILEGES ON tcc_viagem.* TO 'tcc_user'@'%';
+GRANT ALL PRIVILEGES ON clients_orders_system.* TO 'tcc_user'@'%';
 FLUSH PRIVILEGES;
 ```
 
@@ -229,7 +229,7 @@ FLUSH PRIVILEGES;
 DB_HOST=192.168.1.100
 DB_USER=tcc_user
 DB_PASSWORD=Tcc@2024!
-DB_NAME=tcc_viagem
+DB_NAME=clients_orders_system
 DB_PORT=3306
 USE_MEMORY_DB=false
 PORT=3001
