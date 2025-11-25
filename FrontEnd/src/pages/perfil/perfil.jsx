@@ -9,7 +9,8 @@ import { getClientById } from "../../api/client"
 export default function Perfil({ user, onLogout }) {
   const navigate = useNavigate()
   const [trips, setTrips] = useState([])
-  const [profile, setProfile] = useState({ nome: user?.nome, email: user?.email })
+  const [profile, setProfile] = useState({ nome: user?.nome, email: user?.email, foto_perfil: user?.foto_perfil })
+  const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
     // Carrega viagens locais por usuário
@@ -24,12 +25,59 @@ export default function Perfil({ user, onLogout }) {
     (async () => {
       try {
         const data = await getClientById(user.id)
-        setProfile({ nome: data.nome, email: data.email })
+        setProfile({ nome: data.nome, email: data.email, foto_perfil: data.foto_perfil })
       } catch (_) {
         // Mantém dados já conhecidos em caso de erro
       }
     })()
   }, [user])
+
+  const handlePhotoUpload = async (event) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validar tipo de arquivo
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor, selecione uma imagem válida')
+      return
+    }
+
+    // Validar tamanho (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('A imagem deve ter no máximo 5MB')
+      return
+    }
+
+    setUploading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('foto', file)
+
+      const response = await fetch(`/api/clients/${user.id}/foto`, {
+        method: 'PUT',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        let message = 'Erro ao fazer upload da foto'
+        try {
+          const err = await response.json()
+          if (err?.error) message = err.error
+        } catch {}
+        throw new Error(message)
+      }
+
+      const data = await response.json()
+      setProfile(prev => ({ ...prev, foto_perfil: data.foto_perfil }))
+      alert('Foto de perfil atualizada com sucesso!')
+    } catch (error) {
+      console.error('Erro:', error)
+      alert(error?.message || 'Erro ao fazer upload da foto. Tente novamente.')
+    } finally {
+      setUploading(false)
+    }
+  }
 
   const capitalize = (str) => {
     if (!str) return ''
@@ -74,9 +122,41 @@ export default function Perfil({ user, onLogout }) {
         
         <div className="perfil-content-wrapper">
           <aside className="perfil-sidebar">
-            <div className="perfil-avatar">
-              <span role="img" aria-label="user">👤</span>
+            <div className="perfil-avatar" onClick={() => !uploading && document.getElementById('photo-input').click()}>
+              {profile.foto_perfil ? (
+                <img 
+                  src={profile.foto_perfil} 
+                  alt="Foto de perfil" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                />
+              ) : (
+                <span role="img" aria-label="user">👤</span>
+              )}
+              {uploading && (
+                <div style={{ 
+                  position: 'absolute', 
+                  top: 0, 
+                  left: 0, 
+                  right: 0, 
+                  bottom: 0, 
+                  background: 'rgba(0,0,0,0.5)', 
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white'
+                }}>
+                  Enviando...
+                </div>
+              )}
             </div>
+            <input 
+              id="photo-input"
+              type="file" 
+              accept="image/*" 
+              style={{ display: 'none' }}
+              onChange={handlePhotoUpload}
+            />
 
             <div className="perfil-info">
               <div className="perfil-joined">

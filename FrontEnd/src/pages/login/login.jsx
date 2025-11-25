@@ -8,7 +8,7 @@ import { registerClient, loginClient } from "../../api/client"
 export default function Login({ onLogin }) {
   const navigate = useNavigate()
   const [isSignUp, setIsSignUp] = useState(false)
-  const [nome, setNome] = useState("")
+  const [usuario, setUsuario] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -18,7 +18,7 @@ export default function Login({ onLogin }) {
     e.preventDefault()
     setError("")
 
-    if (!email || !password || (isSignUp && !nome)) {
+    if (!email || !password || (isSignUp && !usuario)) {
       setError("Por favor, preencha todos os campos")
       return
     }
@@ -36,7 +36,7 @@ export default function Login({ onLogin }) {
 
     try {
       if (isSignUp) {
-        const result = await registerClient({ nome, email, password })
+        const result = await registerClient({ usuario, email, password })
         // Após cadastro, efetua login automaticamente
         const logged = await loginClient({ email, password })
         onLogin({ id: logged.id, nome: logged.nome, email: logged.email })
@@ -61,13 +61,13 @@ export default function Login({ onLogin }) {
         <form onSubmit={handleSubmit} className="login-form">
           {isSignUp && (
             <div className="form-group">
-              <label htmlFor="nome">Nome</label>
+              <label htmlFor="usuario">Usuário</label>
               <input
-                id="nome"
+                id="usuario"
                 type="text"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                placeholder="Seu nome completo"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
+                placeholder="Seu nome de usuário"
               />
             </div>
           )}
@@ -128,6 +128,18 @@ export default function Login({ onLogin }) {
               {isSignUp ? "Faça Login" : "Crie agora"}
             </button>
           </p>
+          {!isSignUp && (
+            <p style={{ marginTop: '10px' }}>
+              <button
+                type="button"
+                className="toggle-btn"
+                style={{ color: '#007af5', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}
+                onClick={() => navigate("/recuperar-senha")}
+              >
+                Esqueci minha senha
+              </button>
+            </p>
+          )}
         </div>
       </div>
 

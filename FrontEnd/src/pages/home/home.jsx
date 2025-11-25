@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
+import { searchImage } from "../../api/images"
 import "./home.css"
 import Footer from "../footer/footer"
 
@@ -36,57 +37,116 @@ const popularDestinations = [
     name: "Ilhas Gregas",
     location: "Santorini, Grécia",
     description: "Casas brancas com cúpulas azuis e pôr do sol inesquecíveis sobre o Mar Egeu",
-    image: "/images/santorini.jpg",
+    searchTerm: "Santorini Greece",
   },
   {
     id: 2,
     name: "Alpes Suíços",
     location: "Suíça",
     description: "Montanhas majestosas, trilhas alpinas e paisagens de tirar o fôlego",
-    image: "/images/swiss_alps.jpg",
+    searchTerm: "Swiss Alps Mountains",
   },
   {
     id: 3,
     name: "Cidade Vibrante",
     location: "Tóquio, Japão",
     description: "Luzes neon, tecnologia de ponta e cultura milenar em harmonia",
-    image: "/images/tokyo.jpg",
+    searchTerm: "Tokyo Japan",
   },
   {
     id: 4,
     name: "Refúgio Tropical",
     location: "Bali, Indonésia",
     description: "Terraços de arroz verde-esmeralda e templos sagrados na ilha dos deuses",
-    image: "/images/bali.jpg",
+    searchTerm: "Bali Indonesia",
   },
   {
     id: 5,
     name: "Paraíso Luxuoso",
     location: "Maldivas",
     description: "Vilas sobre a água com o oceano turquesa mais claro do mundo",
-    image: "/images/maldives.jpg",
+    searchTerm: "Maldives",
   },
   {
     id: 6,
     name: "Cidade Luz",
     location: "Paris, França",
     description: "Cultura, arte, romance e a icônica Torre Eiffel ao pôr do sol",
-    image: "/images/paris.jpg",
+    searchTerm: "Paris France",
   },
 ]
 
 function PopularDestinationsSection() {
+  const [destinationImages, setDestinationImages] = useState({});
+  const [imagesLoaded, setImagesLoaded] = useState({});
+  const listRef = useRef(null)
+
+  useEffect(() => {
+    // Carregar imagens para todos os destinos
+    const loadImages = async () => {
+      const images = {};
+      const loaded = {};
+      for (const dest of popularDestinations) {
+        try {
+          const imageUrl = await searchImage(dest.searchTerm);
+          if (imageUrl) {
+            images[dest.id] = imageUrl;
+          }
+        } catch (error) {
+          console.error(`Erro ao carregar imagem para ${dest.name}:`, error);
+        } finally {
+          loaded[dest.id] = true;
+        }
+      }
+      setDestinationImages(images);
+      setImagesLoaded(loaded);
+    };
+
+    loadImages();
+  }, []);
+
+  const scrollByAmount = (dir) => {
+    const el = listRef.current
+    if (!el) return
+    const amount = Math.round(el.clientWidth * 0.9) * (dir === 'next' ? 1 : -1)
+    el.scrollBy({ left: amount, behavior: 'smooth' })
+  }
+
   return (
     <section className="destinations-section">
       <div className="section-header">
         <h3 className="section-title">Destinos Populares</h3>
         <p className="section-subtitle">Explore os lugares mais incríveis do mundo</p>
       </div>
-      <div className="destinations-grid">
+      <button type="button" className="carousel-nav prev" onClick={() => scrollByAmount('prev')} aria-label="Anterior">‹</button>
+      <button type="button" className="carousel-nav next" onClick={() => scrollByAmount('next')} aria-label="Próximo">›</button>
+      <div className="destinations-carousel" ref={listRef}>
         {popularDestinations.map((destination) => (
           <div key={destination.id} className="destination-card">
             <div className="destination-image-wrapper">
-              <div className="placeholder-image" style={{backgroundImage: `url(${destination.image})`}} title={destination.name}>
+              <div 
+                className="placeholder-image" 
+                style={{
+                  backgroundImage: destinationImages[destination.id] 
+                    ? `url(${destinationImages[destination.id]})` 
+                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }} 
+                title={destination.name}
+              >
+                {!imagesLoaded[destination.id] && (
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    height: '100%', 
+                    color: 'white',
+                    fontSize: '14px'
+                  }}>
+                    Carregando...
+                  </div>
+                )}
               </div>
             </div>
             <div className="destination-info">
@@ -164,11 +224,20 @@ export default function Home({ user, onLogout }) {
     <div className="home-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1 className="navbar-title"> Viagem+</h1>
+          <h1 className="navbar-title">✈️ Viagem+</h1>
+
+          <div className="nav-links">
+            <button className="nav-link-btn" onClick={() => navigate("/my-trips")}>
+              ✈️ Minhas Viagens
+            </button>
+            <button className="nav-link-btn" onClick={() => navigate("/plan-trip")}>
+              📝 Agendar Viagem
+            </button>
+          </div>
 
           <div className="user-menu" ref={menuRef}>
             <button className="user-btn" onClick={toggleMenu}>
-              <span role="img" aria-label="user">👤</span>
+              <span role="img" aria-label="user">👤</span> {userName}
             </button>
 
             {isMenuOpen && (
@@ -180,10 +249,10 @@ export default function Home({ user, onLogout }) {
                     navigate("/user-profile")
                   }}
                 >
-                  Ver Perfil
+                  👤 Ver Perfil
                 </button>
                 <button className="menu-item logout" onClick={handleLogout}>
-                  Sair
+                  🚪 Sair
                 </button>
               </div>
             )}

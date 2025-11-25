@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { searchImage } from "../../api/images"
 import "./planejar-viagens.css"
 
 export default function PlanTrip({ user, onLogout }) {
@@ -43,7 +44,7 @@ export default function PlanTrip({ user, onLogout }) {
     }
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
     setSuccess("")
@@ -59,6 +60,14 @@ export default function PlanTrip({ user, onLogout }) {
       return
     }
 
+    // Buscar imagem para o destino antes de salvar
+    let tripImage = null;
+    try {
+      tripImage = await searchImage(destination);
+    } catch (error) {
+      console.error('Erro ao buscar imagem:', error);
+    }
+
     const newTrip = {
       id: Date.now(),
       name: tripName,
@@ -66,6 +75,7 @@ export default function PlanTrip({ user, onLogout }) {
       startDate,
       endDate,
       description,
+      image: tripImage || null,
       expenses: [],
       packingList: [],
       createdAt: new Date().toISOString(),
@@ -88,6 +98,13 @@ export default function PlanTrip({ user, onLogout }) {
     navigate("/login")
   }
 
+  const capitalize = (str) => {
+    if (!str) return ''
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  }
+
+  const userName = capitalize(user?.email?.split('@')[0]) || 'Usuário'
+
   return (
     <div className="plan-trip-container">
       <nav className="navbar">
@@ -108,7 +125,7 @@ export default function PlanTrip({ user, onLogout }) {
                 aria-expanded={isMenuOpen}
                 title="Abrir menu do usuário"
               >
-                <span role="img" aria-label="user">👤</span>
+                <span role="img" aria-label="user">👤</span> {userName}
               </button>
 
               {isMenuOpen && (
