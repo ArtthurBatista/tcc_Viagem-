@@ -77,49 +77,38 @@ export default function MyTrips({ user, onLogout }) {
     <div className="my-trips-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1 className="navbar-title"> Viagem+</h1>
-          <div className="nav-actions">
-            <button className="nav-btn" onClick={() => navigate("/home")}>
-              Home
+          <h1 className="navbar-title">✈️ Viagem+</h1>
+
+          <div className="nav-links">
+            <button className="nav-link-btn" onClick={() => navigate("/home")}>
+              🏠 Home
             </button>
-            <button className="nav-btn" onClick={() => navigate("/plan-trip")}>
-              Planejar Viagem
+            <button className="nav-link-btn" onClick={() => navigate("/plan-trip")}>
+              📝 Agendar Viagem
+            </button>
+          </div>
+
+          <div className="user-menu" ref={menuRef}>
+            <button className="user-btn" onClick={toggleMenu}>
+              <span role="img" aria-label="user">👤</span> {userName}
             </button>
 
-            <div className="user-menu" ref={menuRef}>
-              <button
-                className={`user-btn ${isMenuOpen ? "open" : ""}`}
-                onClick={toggleMenu}
-                aria-haspopup="true"
-                aria-expanded={isMenuOpen}
-                title="Abrir menu do usuário"
-              >
-                <span role="img" aria-label="user">👤</span> {userName}
-              </button>
-
-              {isMenuOpen && (
-                <div className="menu-popup" role="menu">
-                  <button
-                    className="menu-item"
-                    onClick={() => {
-                      setIsMenuOpen(false)
-                      navigate("/user-profile")
-                    }}
-                  >
-                    Ver Perfil
-                  </button>
-                  <button
-                    className="menu-item logout"
-                    onClick={() => {
-                      setIsMenuOpen(false)
-                      handleLogout()
-                    }}
-                  >
-                    Sair
-                  </button>
-                </div>
-              )}
-            </div>
+            {isMenuOpen && (
+              <div className="menu-popup">
+                <button
+                  className="menu-item"
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    navigate("/user-profile")
+                  }}
+                >
+                  👤 Ver Perfil
+                </button>
+                <button className="menu-item logout" onClick={handleLogout}>
+                  🚪 Sair
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </nav>

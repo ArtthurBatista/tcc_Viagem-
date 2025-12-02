@@ -102,21 +102,30 @@ export default function Perfil({ user, onLogout }) {
     <div className="perfil-container">
       <nav className="navbar">
         <div className="navbar-content">
-          <h1 className="navbar-title">Viagem+</h1>
-          <span 
-            className="nav-logout" 
-            onClick={() => {
+          <h1 className="navbar-title">✈️ Viagem+</h1>
+
+          <div className="nav-links">
+            <button className="nav-link-btn" onClick={() => navigate("/home")}>
+              🏠 Home
+            </button>
+            <button className="nav-link-btn" onClick={() => navigate("/my-trips")}>
+              ✈️ Minhas Viagens
+            </button>
+          </div>
+
+          <div className="user-menu">
+            <button className="user-btn" onClick={() => {
               onLogout()
               navigate('/login')
-            }}
-          >
-            Sair
-          </span>
+            }}>
+              <span role="img" aria-label="user">👤</span> Sair
+            </button>
+          </div>
         </div>
       </nav>
 
       <div className="perfil-main">
-        <button className="back-btn" onClick={() => navigate("/my-trips")}>
+        <button className="back-btn" onClick={() => navigate("/home")}>
           ← Voltar
         </button>
         

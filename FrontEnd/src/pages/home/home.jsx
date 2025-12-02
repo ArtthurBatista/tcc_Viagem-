@@ -114,50 +114,54 @@ function PopularDestinationsSection() {
 
   return (
     <section className="destinations-section">
-      <div className="section-header">
-        <h3 className="section-title">Destinos Populares</h3>
-        <p className="section-subtitle">Explore os lugares mais incríveis do mundo</p>
-      </div>
-      <button type="button" className="carousel-nav prev" onClick={() => scrollByAmount('prev')} aria-label="Anterior">‹</button>
-      <button type="button" className="carousel-nav next" onClick={() => scrollByAmount('next')} aria-label="Próximo">›</button>
-      <div className="destinations-carousel" ref={listRef}>
-        {popularDestinations.map((destination) => (
-          <div key={destination.id} className="destination-card">
-            <div className="destination-image-wrapper">
-              <div 
-                className="placeholder-image" 
-                style={{
-                  backgroundImage: destinationImages[destination.id] 
-                    ? `url(${destinationImages[destination.id]})` 
-                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }} 
-                title={destination.name}
-              >
-                {!imagesLoaded[destination.id] && (
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    height: '100%', 
-                    color: 'white',
-                    fontSize: '14px'
-                  }}>
-                    Carregando...
+      <div className="destinations-layout">
+        <div className="destinations-left">
+          <h2 className="destinations-title-large">Sua Próxima</h2>
+          <h2 className="destinations-title-large">Grande Aventura</h2>
+          <h2 className="destinations-title-large">Espera <span className="airplane-emoji">✈️</span></h2>
+          <p className="destinations-subtitle-text">Cansado da Rotina? Deixe-se inspirado pelos "Destinos Populares" do mundo.</p>
+          <p className="destinations-subtitle-text">Clique em qualquer um para ver os detalhes e comece a palmejar sua viagem inesquecível agora mesmo com o Viagem + !!</p>
+        </div>
+
+        <div className="destinations-right">
+          <button type="button" className="carousel-nav prev" onClick={() => scrollByAmount('prev')} aria-label="Anterior">‹</button>
+          <button type="button" className="carousel-nav next" onClick={() => scrollByAmount('next')} aria-label="Próximo">›</button>
+          <div className="destinations-carousel" ref={listRef}>
+            {popularDestinations.map((destination) => (
+              <div key={destination.id} className="destination-card">
+                <div className="destination-image-wrapper">
+                  <div 
+                    className="placeholder-image" 
+                    style={{
+                      backgroundImage: destinationImages[destination.id] 
+                        ? `url(${destinationImages[destination.id]})` 
+                        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }} 
+                    title={destination.name}
+                  >
+                    {!imagesLoaded[destination.id] && (
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        height: '100%', 
+                        color: 'white',
+                        fontSize: '14px'
+                      }}>
+                        Carregando...
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className="destination-overlay">
+                    <p className="destination-location-overlay">{destination.location}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="destination-info">
-              <p className="destination-location">
-                <span role="img" aria-label="pin">📍</span> {destination.location}
-              </p>
-              <h4 className="destination-name">{destination.name}</h4>
-              <p className="destination-description">{destination.description}</p>
-            </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </section>
   )

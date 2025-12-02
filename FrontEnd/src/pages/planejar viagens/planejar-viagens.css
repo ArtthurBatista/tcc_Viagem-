@@ -28,14 +28,15 @@
   justify-self: start;
 }
 
-.nav-actions {
+.nav-links {
   display: flex;
   gap: 15px;
   align-items: center;
-  justify-self: end;
+  justify-content: center;
+  justify-self: center;
 }
 
-.nav-btn {
+.nav-link-btn {
   background: none;
   color: var(--dark-color);
   padding: 8px 15px;
@@ -46,24 +47,98 @@
   transition: var(--transition);
 }
 
-.nav-btn:hover {
+.nav-link-btn:hover {
   border-color: var(--primary-color);
   color: var(--primary-color);
 }
 
-.logout-btn {
-  background: var(--primary-color);
-  color: white;
-  padding: 8px 20px;
-  border-radius: 6px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-self: end;
 }
 
-.logout-btn:hover {
-  background: #0255a8;
+.user-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 9999px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(11, 47, 120, 0.06);
+}
+
+.user-btn span[role="img"] {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.user-btn:hover,
+.user-btn.open {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 22px rgba(10, 20, 60, 0.14);
+  background: linear-gradient(135deg, #6dd3ff 0%, #6fb8ff 50%, #8a9cff 100%);
+  color: #023e8a;
+}
+
+.user-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(99, 155, 255, 0.18);
+}
+
+.menu-popup {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 160px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(10, 20, 45, 0.12);
+  padding: 6px;
+  z-index: 1200;
+  transform-origin: top right;
+  animation: popup-in 140ms ease;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  color: #0b2840;
+  font-weight: 600;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.menu-item:hover {
+  background: linear-gradient(90deg, rgba(102,187,255,0.12), rgba(100,140,255,0.08));
+  color: #03294b;
+}
+
+.menu-item.logout {
+  color: #b83232;
+}
+.menu-item.logout:hover {
+  background: rgba(184,50,50,0.06);
+  color: #7a1f1f;
+}
+
+@keyframes popup-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .plan-trip-main {

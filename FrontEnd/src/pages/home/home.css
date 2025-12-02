@@ -290,31 +290,52 @@
 
 .destinations-section {
     margin-bottom: 60px;
-    padding: 20px 0;
-    text-align: center;
-    position: relative;
+    padding: 60px 48px;
+    background: #f9fafb;
 }
 
-.destinations-section .section-header {
-    margin-bottom: 40px;
+.destinations-layout {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 60px;
+    align-items: center;
 }
 
-.destinations-section .section-title {
-    font-size: 32px;
-    color: var(--dark-color);
-    margin-bottom: 10px;
+.destinations-left {
+    text-align: left;
+}
+
+.destinations-title-large {
+    font-size: 48px;
     font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin: 0 0 8px 0;
 }
 
-.destinations-section .section-subtitle {
-    font-size: 16px;
+.airplane-emoji {
+    display: inline-block;
+    font-size: 36px;
+    margin-left: 8px;
+}
+
+.destinations-subtitle-text {
+    font-size: 14px;
     color: #666;
+    line-height: 1.6;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.destinations-right {
+    position: relative;
+    overflow: hidden;
 }
 
 .destinations-carousel {
     display: flex;
     gap: 20px;
-    padding: 0 48px; /* espaço lateral para as setas */
+    padding: 0 60px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
@@ -331,13 +352,12 @@
 
 .destination-card {
     background: white;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
     overflow: hidden;
-    text-align: left;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     scroll-snap-align: start;
-    flex: 0 0 320px;
+    flex: 0 0 380px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .destination-card:hover {
@@ -347,8 +367,9 @@
 
 .destination-image-wrapper {
     width: 100%;
-    height: 200px;
+    height: 280px;
     overflow: hidden;
+    position: relative;
 }
 
 .placeholder-image {
@@ -363,33 +384,20 @@
     transform: scale(1.05);
 }
 
-.destination-info {
-    padding: 15px 20px 25px 20px;
+.destination-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 16px 20px;
 }
 
-.destination-location {
-    font-size: 12px;
-    color: var(--primary-color);
+.destination-location-overlay {
+    font-size: 16px;
+    color: white;
     font-weight: 600;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.destination-name {
-    font-size: 18px;
-    color: var(--dark-color);
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.destination-description {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.5;
-    height: 40px;
-    overflow: hidden;
+    margin: 0;
 }
 
 /* Carousel nav buttons */
@@ -397,27 +405,60 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 36px;
-    height: 36px;
-    border-radius: 9999px;
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.95);
     color: #111827;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     user-select: none;
-    z-index: 50; /* garantir que fique acima dos cards/imagens */
+    z-index: 200;
     pointer-events: auto;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1;
+    transition: all 0.2s ease;
 }
 
-.carousel-nav.prev { left: 8px; }
-.carousel-nav.next { right: 8px; }
+.carousel-nav.prev { 
+    left: 10px;
+}
+
+.carousel-nav.next { 
+    right: 10px;
+}
+
+.carousel-nav:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transform: translateY(-50%) scale(1.1);
+}
+
+@media (max-width: 1024px) {
+    .destinations-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .destinations-left {
+        text-align: center;
+    }
+    
+    .destinations-title-large {
+        font-size: 36px;
+    }
+}
 
 @media (max-width: 640px) {
     .destination-card { flex-basis: 280px; }
+    .destinations-title-large {
+        font-size: 28px;
+    }
 }
 
 /* Estilos para a seção de Recursos */

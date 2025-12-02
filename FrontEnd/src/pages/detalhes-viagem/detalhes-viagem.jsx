@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import Footer from "../footer/footer"
 import "./detalhes-viagem.css"
 
 export default function TripDetails({ user, onLogout }) {
   const navigate = useNavigate()
   const { tripId } = useParams()
   const [trip, setTrip] = useState(null)
-  const [activeTab, setActiveTab] = useState("expenses")
-  const [newExpense, setNewExpense] = useState({ description: "", amount: "", category: "alimentação" })
+  const [activeTab, setActiveTab] = useState("gastos")
+  const [newExpense, setNewExpense] = useState({ description: "", amount: "", category: "" })
   const [newPackingItem, setNewPackingItem] = useState("")
   const [editingExpenseId, setEditingExpenseId] = useState(null)
   
@@ -146,289 +147,233 @@ export default function TripDetails({ user, onLogout }) {
 
   return (
     <div className="trip-details-container">
+      {/* Navbar */}
       <nav className="navbar">
         <div className="navbar-content">
           <h1 className="navbar-title">✈️ Viagem+</h1>
-          <div className="nav-actions">
-            <button className="nav-btn" onClick={() => navigate("/home")}>
-              Home
-            </button>
-            <button className="nav-btn" onClick={() => navigate("/my-trips")}>
-              Minhas Viagens
-            </button>
-            <div className="user-menu" ref={menuRef}>
-              <button
-                className={`user-btn ${isMenuOpen ? "open" : ""}`}
-                onClick={toggleMenu}
-                aria-haspopup="true"
-                aria-expanded={isMenuOpen}
-                title="Abrir menu do usuário"
-              >
-                <span role="img" aria-label="user">👤</span> {userName}
-              </button>
 
-              {isMenuOpen && (
-                <div className="menu-popup" role="menu">
-                  <button
-                    className="menu-item"
-                    onClick={() => {
-                      setIsMenuOpen(false)
-                      navigate("/user-profile")
-                    }}
-                  >
-                    Ver Perfil
-                  </button>
-                  <button
-                    className="menu-item logout"
-                    onClick={() => {
-                      setIsMenuOpen(false)
-                      handleLogout()
-                    }}
-                  >
-                    Sair
-                  </button>
-                </div>
-              )}
-            </div>
+          <div className="nav-links">
+            <button className="nav-link-btn" onClick={() => navigate("/home")}>
+              🏠 Home
+            </button>
+            <button className="nav-link-btn" onClick={() => navigate("/my-trips")}>
+              ✈️ Minhas Viagens
+            </button>
+          </div>
+
+          <div className="user-menu" ref={menuRef}>
+            <button className="user-btn" onClick={toggleMenu}>
+              <span role="img" aria-label="user">👤</span> {userName}
+            </button>
+
+            {isMenuOpen && (
+              <div className="menu-popup">
+                <button
+                  className="menu-item"
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    navigate("/user-profile")
+                  }}
+                >
+                  👤 Ver Perfil
+                </button>
+                <button className="menu-item logout" onClick={handleLogout}>
+                  🚪 Sair
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </nav>
 
-      <main className="trip-details-main">
-        <button className="back-btn" onClick={() => navigate("/my-trips")}>
-          ← Voltar
-        </button>
-
-        <div className="trip-details-header">
-          <div>
-            <h2>{trip.name}</h2>
-            <p className="destination">{trip.destination}</p>
+      {/* Header with mountain background */}
+      <div className="hero-header">
+        <img src="/montanha.png" alt="Mountain background" className="hero-background-image" />
+        <div className="hero-overlay"></div>
+        
+        {/* Budget and Items display on hero */}
+        <div className="hero-stats">
+          <div className="hero-stat-item">
+            <div className="stat-label">Orçamento</div>
+            <div className="stat-value">R$ {totalBudget.toFixed(2)}</div>
           </div>
-          <div className="trip-stats">
-            <div className="stat">
-              <span className="stat-label">Gastos Totais</span>
-              <span className="stat-value">R$ {totalBudget.toFixed(2)}</span>
-            </div>
-            <div className="stat">
-              <span className="stat-label">Itens Preparados</span>
-              <span className="stat-value">
-                {packedCount}/{trip.packingList?.length || 0}
-              </span>
+          <div className="hero-stat-item">
+            <div className="stat-label">Itens</div>
+            <div className="stat-value">
+              {packedCount}/{trip.packingList?.length || 0}
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="trip-details-content">
-          <div className="tabs">
-            <button
-              className={`tab-btn ${activeTab === "expenses" ? "active" : ""}`}
-              onClick={() => setActiveTab("expenses")}
-            >
-              Gastos ({trip.expenses?.length || 0})
-            </button>
-            <button
-              className={`tab-btn ${activeTab === "packing" ? "active" : ""}`}
-              onClick={() => setActiveTab("packing")}
-            >
-              Lista de Coisas ({trip.packingList?.length || 0})
-            </button>
-            <button className={`tab-btn ${activeTab === "info" ? "active" : ""}`} onClick={() => setActiveTab("info")}>
-              Informações
-            </button>
-          </div>
-
-
-          {activeTab === "expenses" && (
-            <div className="tab-content">
-              <div className="add-expense-form">
-                <h3>Adicionar Gasto</h3>
-                <div className="form-group">
+      <main className="trip-details-main">
+        {/* Tab Content */}
+        <div className="tab-content-area">
+          {/* Gastos Tab */}
+          {activeTab === "gastos" && (
+            <>
+              {/* Add Expense Section */}
+              <div className="add-expense-section">
+                <h2 className="section-title">Adicionar Gasto</h2>
+                <div className="expense-form">
                   <input
                     type="text"
+                    className="input-field full-width"
                     value={newExpense.description}
                     onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })}
                     placeholder="Descrição do gasto (ex: Hotel, Comida, Transporte)"
                   />
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
+                  <div className="form-row-grid">
                     <input
                       type="number"
+                      className="input-field"
                       value={newExpense.amount}
                       onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
                       placeholder="Valor"
                       step="0.01"
                     />
-                  </div>
-                  <div className="form-group">
-                    <select
+                    <input
+                      type="text"
+                      className="input-field"
                       value={newExpense.category}
                       onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
-                    >
-                      <option value="alimentação">Alimentação</option>
-                      <option value="hospedagem">Hospedagem</option>
-                      <option value="transporte">Transporte</option>
-                      <option value="atividades">Atividades</option>
-                      <option value="compras">Compras</option>
-                      <option value="outro">Outro</option>
-                    </select>
+                      placeholder="Alimentação"
+                    />
                   </div>
+                  <button className="add-button" onClick={handleAddExpense}>
+                    Adicionar Gasto
+                  </button>
                 </div>
-                <button className="add-btn" onClick={handleAddExpense}>
-                  Adicionar Gasto
-                </button>
               </div>
 
+              {/* Expenses list or Empty state */}
               {trip.expenses && trip.expenses.length > 0 ? (
                 <div className="expenses-list">
-                  <h3>Resumo de Gastos</h3>
-                  <div className="expense-categories">
-                    {Array.from(new Set(trip.expenses.map((e) => e.category))).map((category) => {
-                      const categoryTotal = trip.expenses
-                        .filter((e) => e.category === category)
-                        .reduce((sum, e) => sum + e.amount, 0)
-                      return (
-                        <div key={category} className="category-summary">
-                          <span>{category.charAt(0).toUpperCase() + category.slice(1)}</span>
-                          <span className="category-total">R$ {categoryTotal.toFixed(2)}</span>
-                        </div>
-                      )
-                    })}
+                  {trip.expenses.map((expense) => (
+                    <div key={expense.id} className="expense-card">
+                  <div className="expense-details">
+                    <div className="expense-title">{expense.description}</div>
+                    <div className="expense-category">{expense.category}</div>
                   </div>
-
-                  <h3 style={{ marginTop: "30px" }}>Todos os Gastos</h3>
-                  <div className="expenses-table">
-                    {trip.expenses.map((expense) => (
-                      <div key={expense.id} className="expense-item">
-                        <div className="expense-info">
-                          <span className="expense-category-badge">{expense.category}</span>
-                          <div>
-                            <p className="expense-description">{expense.description}</p>
-                            <span className="expense-amount">R$ {expense.amount.toFixed(2)}</span>
-                          </div>
-                        </div>
-                        <button className="delete-expense-btn" onClick={() => handleDeleteExpense(expense.id)}>
-                          ✕
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <div className="expense-amount">R$ {expense.amount.toFixed(2)}</div>
                 </div>
+              ))}
+            </div>
               ) : (
-                <div className="empty-message">
-                  <p>Nenhum gasto registrado ainda</p>
+                <div className="empty-state">
+                  <p>Nenhum Gasto registrado ainda</p>
                 </div>
               )}
-            </div>
+            </>
           )}
 
-
-          {activeTab === "packing" && (
-            <div className="tab-content">
-              <div className="add-packing-form">
-                <h3>Adicionar Item à Lista</h3>
-                <div className="form-group">
+          {/* Itens Tab */}
+          {activeTab === "itens" && (
+            <div className="items-section">
+              <div className="add-item-section">
+                <h3 className="subsection-title">Adicionar Item à Lista</h3>
+                <div className="item-form-single">
                   <input
                     type="text"
+                    className="input-field full-width"
                     value={newPackingItem}
                     onChange={(e) => setNewPackingItem(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && handleAddPackingItem()}
                     placeholder="Ex: Passaporte, Mala, Protetor Solar..."
                   />
+                  <button className="add-button" onClick={handleAddPackingItem}>
+                    Adicionar Item
+                  </button>
                 </div>
-                <button className="add-btn" onClick={handleAddPackingItem}>
-                  Adicionar Item
-                </button>
               </div>
 
               {trip.packingList && trip.packingList.length > 0 ? (
-                <div className="packing-list">
-                  <h3>Minha Lista de Coisas</h3>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${(packedCount / trip.packingList.length) * 100}%` }}
-                    />
-                  </div>
-                  <p className="progress-text">
-                    {packedCount} de {trip.packingList.length} itens preparados
-                  </p>
-
-                  <div className="packing-items">
-                    {trip.packingList.map((item) => (
-                      <div key={item.id} className={`packing-item ${item.packed ? "packed" : ""}`}>
+                <div className="packing-items-list">
+                  {trip.packingList.map((item) => (
+                    <div key={item.id} className="packing-item-card">
+                      <label className="checkbox-label">
                         <input
                           type="checkbox"
                           checked={item.packed}
                           onChange={() => handleTogglePackingItem(item.id)}
-                          className="packing-checkbox"
+                          className="checkbox-input"
                         />
-                        <span className="packing-text">{item.text}</span>
-                        <button className="delete-packing-btn" onClick={() => handleDeletePackingItem(item.id)}>
-                          ✕
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                        <span className={item.packed ? "item-text packed" : "item-text"}>{item.text}</span>
+                      </label>
+                    </div>
+                  ))}
                 </div>
-              ) : (
-                <div className="empty-message">
-                  <p>Nenhum item na sua lista ainda</p>
-                </div>
-              )}
+              ) : null}
             </div>
           )}
 
-
+          {/* Info Tab */}
           {activeTab === "info" && (
-            <div className="tab-content">
-              <div className="trip-info-section">
-                <div className="info-card">
-                  <h3> Destino</h3>
-                  <p>{trip.destination}</p>
-                </div>
+            <div className="info-section-new">
+              <div className="info-box">
+                <h3 className="info-box-title">Destino</h3>
+                <p className="info-box-content">{trip.destination}</p>
+              </div>
 
-                <div className="info-card">
-                  <h3> Datas</h3>
-                  <p>
-                    Início:{" "}
-                    {new Date(trip.startDate).toLocaleDateString("pt-BR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <p>
-                    Fim:{" "}
-                    {new Date(trip.endDate).toLocaleDateString("pt-BR", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                </div>
+              <div className="info-box">
+                <h3 className="info-box-title">Datas</h3>
+                <p className="info-box-content">
+                  Início: {new Date(trip.startDate).toLocaleDateString("pt-BR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+                <p className="info-box-content">
+                  Fim: {new Date(trip.endDate).toLocaleDateString("pt-BR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
 
-                <div className="info-card">
-                  <h3> Duração</h3>
-                  <p>{Math.ceil((new Date(trip.endDate) - new Date(trip.startDate)) / (1000 * 60 * 60 * 24))} dias</p>
-                </div>
+              <div className="info-box">
+                <h3 className="info-box-title">Duração</h3>
+                <p className="info-box-content">
+                  {Math.ceil((new Date(trip.endDate) - new Date(trip.startDate)) / (1000 * 60 * 60 * 24))} dias
+                </p>
+              </div>
 
-                {trip.description && (
-                  <div className="info-card">
-                    <h3> Descrição</h3>
-                    <p>{trip.description}</p>
-                  </div>
-                )}
-
-                <div className="info-card">
-                  <h3> Orçamento Total</h3>
-                  <p className="budget-text">R$ {totalBudget.toFixed(2)}</p>
-                </div>
+              <div className="info-box">
+                <h3 className="info-box-title">Orçamento Total</h3>
+                <p className="info-box-content-highlight">R$ {totalBudget.toFixed(2)}</p>
               </div>
             </div>
           )}
         </div>
       </main>
+
+      {/* Footer with Tabs Navigation */}
+      <div className="footer-tabs">
+        <div className="tabs-nav-footer">
+          <button
+            className={`tab-button-footer ${activeTab === "gastos" ? "active" : ""}`}
+            onClick={() => setActiveTab("gastos")}
+          >
+            Gastos
+          </button>
+          <button
+            className={`tab-button-footer ${activeTab === "itens" ? "active" : ""}`}
+            onClick={() => setActiveTab("itens")}
+          >
+            Itens
+          </button>
+          <button
+            className={`tab-button-footer ${activeTab === "info" ? "active" : ""}`}
+            onClick={() => setActiveTab("info")}
+          >
+            Info
+          </button>
+        </div>
+      </div>
+      
+      <Footer />
     </div>
   )
 }

@@ -41,19 +41,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 60% 40%, #69b2fb 0%, #e8f4f8 60%, #f8f9fa 100%);
-  animation: bgMove 8s linear infinite alternate;
-}
-
-@keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+  background: linear-gradient(135deg, #eeeeee 0%, #a2a1a1 50%, #525252 75%, #313131 100%);
 }
 
 .recuperar-card {
-  background: linear-gradient(120deg, #fff 80%, #e3f0ff 100%);
+  background: white;
   border-radius: 22px;
-  box-shadow: 0 8px 40px rgba(60, 80, 120, 0.18), 0 1.5px 0 #69b2fb;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
   padding: 48px 36px 36px 36px;
   width: 100%;
   max-width: 400px;
@@ -75,7 +69,7 @@
   right: -60px;
   width: 120px;
   height: 120px;
-  background: linear-gradient(135deg, #69b2fb 0%, #007af5 100%);
+  background: linear-gradient(135deg, #525252 0%, #313131 100%);
   opacity: 0.13;
   border-radius: 50%;
   z-index: 0;
@@ -103,50 +97,33 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1.5px solid #b3d6fc;
+  border: 2px solid #e0e0e0;
   font-size: 16px;
-  background: #f8fbff;
+  background: white;
   transition: border 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 8px rgba(105, 157, 254, 0.07);
 }
 .form-group input:focus {
-  border: 1.5px solid #007af5;
-  box-shadow: 0 2px 16px rgba(105, 157, 254, 0.13);
+  outline: none;
+  border: 2px solid #525252;
+  box-shadow: 0 0 0 3px rgba(82, 82, 82, 0.1);
 }
 
 .recuperar-btn {
-  background: linear-gradient(135deg, #69b2fb 0%, #007af5 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #525252 0%, #313131 100%);
+  color: white;
   font-weight: 700;
   border: none;
   border-radius: 14px;
   padding: 12px 28px;
   font-size: 17px;
-  box-shadow: 0 2px 16px rgba(105, 157, 254, 0.13);
   cursor: pointer;
-  transition: transform 0.22s, box-shadow 0.22s, background 0.22s;
+  transition: transform 0.22s, box-shadow 0.22s;
   margin-top: 14px;
   letter-spacing: 0.5px;
-  position: relative;
-  overflow: hidden;
-}
-.recuperar-btn::after {
-  content: "";
-  position: absolute;
-  left: 0; top: 0; right: 0; bottom: 0;
-  background: linear-gradient(120deg, #fff 0%, #69b2fb 100%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  border-radius: 14px;
-  z-index: 0;
 }
 .recuperar-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 12px 32px rgba(105, 157, 254, 0.22);
-  background: linear-gradient(135deg, #007af5 0%, #69b2fb 100%);
-}
-.recuperar-btn:active::after {
-  opacity: 0.12;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(65, 65, 65, 0.4);
 }
 
 .recuperar-btn:hover {
