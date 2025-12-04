@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react"
 import { searchImage } from "../../api/images"
 import "./home.css"
 import Footer from "../footer/footer"
+import ChatWidget from "../../components/ChatWidget/ChatWidget"
 
 const amazingFeatures = [
   {
@@ -304,6 +305,7 @@ export default function Home({ user, onLogout }) {
       </main>
 
       <Footer />
+      <ChatWidget />
     </div>
   )
 }

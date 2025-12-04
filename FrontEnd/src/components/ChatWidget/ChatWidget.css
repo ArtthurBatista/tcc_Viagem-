@@ -1,0 +1,163 @@
+/* Variáveis CSS para fácil customização */
+:root {
+  --cor-fundo-widget: #1a1a2e;
+  --cor-fundo-widget-hover: #16213e;
+  --cor-texto-widget: #ffffff;
+  --cor-sombra-widget: rgba(0, 0, 0, 0.3);
+  --cor-borda-widget: #0f3460;
+  --cor-destaque-widget: #4ecdc4;
+}
+
+.widget-chat {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999;
+  
+  /* Layout inline-flex (ícone + texto) */
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  
+  /* Estilo visual moderno */
+  background: var(--cor-fundo-widget);
+  color: var(--cor-texto-widget);
+  border: 2px solid var(--cor-borda-widget);
+  border-radius: 50px;
+  padding: 12px 20px 12px 12px;
+  
+  /* Sombra suave */
+  box-shadow: 0 4px 12px var(--cor-sombra-widget);
+  
+  /* Cursor e transições */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  /* Reset de botão */
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  outline: none;
+}
+
+/* Ícone do chatbot */
+.icone-widget-chat {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+/* Texto do widget */
+.texto-widget-chat {
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* Efeito de hover */
+.widget-chat:hover {
+  background: var(--cor-fundo-widget-hover);
+  border-color: var(--cor-destaque-widget);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.widget-chat:hover .icone-widget-chat {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Efeito de click/active */
+.widget-chat:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px var(--cor-sombra-widget);
+}
+
+/* Foco visível para acessibilidade */
+.widget-chat:focus-visible {
+  outline: 3px solid var(--cor-destaque-widget);
+  outline-offset: 3px;
+}
+
+/* Animação de entrada */
+@keyframes deslizarEntrada {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.widget-chat {
+  animation: deslizarEntrada 0.5s ease-out;
+}
+
+/* Responsivo - tablets */
+@media (max-width: 768px) {
+  .widget-chat {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 16px 10px 10px;
+    font-size: 14px;
+  }
+  
+  .icone-widget-chat {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Responsivo - mobile */
+@media (max-width: 480px) {
+  .widget-chat {
+    bottom: 15px;
+    right: 15px;
+    padding: 8px 12px 8px 8px;
+    font-size: 13px;
+    gap: 8px;
+  }
+  
+  .icone-widget-chat {
+    width: 24px;
+    height: 24px;
+  }
+  
+  /* Opção: apenas ícone em telas muito pequenas */
+  .texto-widget-chat {
+    display: none;
+  }
+  
+  .widget-chat {
+    padding: 10px;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    justify-content: center;
+  }
+}
+
+/* Tema claro (opcional) */
+@media (prefers-color-scheme: light) {
+  :root {
+    --cor-fundo-widget: #ffffff;
+    --cor-fundo-widget-hover: #f5f5f5;
+    --cor-texto-widget: #1a1a2e;
+    --cor-borda-widget: #e0e0e0;
+  }
+}
+
+/* Animação de pulso sutil (opcional) */
+@keyframes pulsar {
+  0%, 100% {
+    box-shadow: 0 4px 12px var(--cor-sombra-widget);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(78, 205, 196, 0.5);
+  }
+}
+
+.widget-chat.pulsar {
+  animation: pulsar 2s infinite;
+}

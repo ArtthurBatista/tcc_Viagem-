@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import "./Perfil.css"
 import { getClientById } from "../../api/client"
+import ChatWidget from "../../components/ChatWidget/ChatWidget"
 
 export default function Perfil({ user, onLogout }) {
   const navigate = useNavigate()
@@ -235,6 +236,7 @@ export default function Perfil({ user, onLogout }) {
           </section>
         </div>
       </div>
+      <ChatWidget />
     </div>
   )
 }
